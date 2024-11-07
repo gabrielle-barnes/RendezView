@@ -4,10 +4,12 @@ import HomePage from "../pages/HomePage";
 import UserProfilePage from "../pages/UserProfilePage";
 import FriendProfilePage from "../pages/FriendProfilePage";
 import { Layout } from "../Layout";
+import { SignIn, SignOut } from "../components/Auth";
+import { useAuthentication } from "../services/authService"; 
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const user = useAuthentication();
 
   return (
     <>
@@ -21,6 +23,14 @@ function App() {
         </Routes>
       </Router>
       <h1>Plan&Do</h1>
+
+      <div className="auth-section">
+        {user ? (
+          <SignOut />
+        ) : (
+          <SignIn />
+        )}
+      </div>
     </>
   );
 }
