@@ -6,6 +6,7 @@ import "./App.css";
 import HomePage from "../pages/HomePage";
 import UserProfilePage from "../pages/UserProfilePage";
 import FriendProfilePage from "../pages/FriendProfilePage";
+import { Layout } from "../Layout";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -14,9 +15,11 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="/friend" element={<FriendProfilePage />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/profile" element={<UserProfilePage />} />
+            <Route path="/friend" element={<FriendProfilePage />} />
+          </Route>
         </Routes>
       </Router>
       <h1>Plan&Do</h1>
