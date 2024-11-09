@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import UserProfilePage from "../pages/UserProfilePage";
 import FriendProfilePage from "../pages/FriendProfilePage";
 import { Layout } from "../Layout";
 import { SignIn, SignOut } from "../components/Auth";
-import { useAuthentication } from "../services/authService"; 
+import { useAuthentication } from "../services/authService";
 import "./App.css";
 
 function App() {
@@ -24,13 +24,7 @@ function App() {
       </Router>
       <h1>Plan&Do</h1>
 
-      <div className="auth-section">
-        {user ? (
-          <SignOut />
-        ) : (
-          <SignIn />
-        )}
-      </div>
+      <div className="auth-section">{user ? <SignOut /> : <SignIn />}</div>
     </>
   );
 }
