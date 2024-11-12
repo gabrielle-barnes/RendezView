@@ -1,110 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { getFirestore, doc, getDoc, collection, updateDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
 function FriendRequestComponent() {
-  const auth = getAuth();
-  const db = getFirestore();
   const [userId, setUserId] = useState(null);
   const [friendRequests, setFriendRequests] = useState([]);
+  const [friends, setFriends] = useState([]);
   const [friendId, setFriendId] = useState('');
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUserId(user.uid);
-        listenForFriendRequests(user.uid);
+        getFriendRequests(user.uid);
+        getFriends(user.uid);
       } else {
         setUserId(null);
+        setFriendRequests([]);
+        setFriends([]);
       }
     });
 
     return () => unsubscribe();
   }, []);
 
-  const listenForFriendRequests = (uid) => {
-    const userDocRef = doc(db, 'users', uid);
-    return onSnapshot(userDocRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        setFriendRequests(docSnapshot.data().friendRequests || []);
-      }
-    }, (error) => {
-      console.error('Error listening for friend requests:', error);
-    });
-  };
-
-  const sendFriendRequest = async () => {
-    if (!friendId || friendId === userId) {
-      console.error('Invalid friend ID');
-      return;
-    }
-    
+  async function getFriendRequests(uid) {
     try {
-      const friendDocRef = doc(db, 'users', friendId);
-      const friendDoc = await getDoc(friendDocRef);
-
-      if (friendDoc.exists()) {
-        await updateDoc(friendDocRef, {
-          friendRequests: arrayUnion(userId)
-        });
-      } else {
-        console.error('Friend ID not found');
+      const userDoc = doc(db, 'users', uid);
+      const userSnap = await getDoc(userDoc);
+      if (userSnap.exists()) {
+        setFriendRequests(userSnap.data().friendRequests || []);
       }
     } catch (error) {
-      console.error('Error sending friend request:', error);
+      console.error("Error fetching friend requests:", error);
     }
-  };
+  }
 
-  const acceptFriendRequest = async (requestId) => {
+  async function sendFriendRequest() {
     try {
-      await updateDoc(doc(db, 'users', userId), {
+      const friendDoc = doc(db, 'users', friendId);
+      await updateDoc(friendDoc, { friendRequests: arrayUnion(userId) });
+      setFriendId(''); // Reset input after sending
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+    }
+  }
+
+  async function acceptFriendRequest(requestId) {
+    try {
+      const userDoc = doc(db, 'users', userId);
+      await updateDoc(userDoc, {
         friendRequests: arrayRemove(requestId),
-        friends: arrayUnion(requestId)
+        friends: arrayUnion(requestId),
       });
 
-      await updateDoc(doc(db, 'users', requestId), {
-        friends: arrayUnion(userId)
-      });
+      const friendDoc = doc(db, 'users', requestId);
+      await updateDoc(friendDoc, { friends: arrayUnion(userId) });
+
+      setFriendRequests((prev) => prev.filter((id) => id !== requestId));
+      setFriends((prev) => [...prev, requestId]);
     } catch (error) {
-      console.error('Error accepting friend request:', error);
+      console.error("Error accepting friend request:", error);
     }
-  };
+  }
 
-  const rejectFriendRequest = async (requestId) => {
+  async function rejectFriendRequest(requestId) {
     try {
-      await updateDoc(doc(db, 'users', userId), {
-        friendRequests: arrayRemove(requestId)
-      });
+      const userDoc = doc(db, 'users', userId);
+      await updateDoc(userDoc, { friendRequests: arrayRemove(requestId) });
+      setFriendRequests((prev) => prev.filter((id) => id !== requestId));
     } catch (error) {
-      console.error('Error rejecting friend request:', error);
+      console.error("Error rejecting friend request:", error);
     }
-  };
+  }
 
-  return (
-    <div>
-      {userId && (
-        <div>
-          <h2>Friend Requests</h2>
-          <ul>
-            {friendRequests.map(requestId => (
-              <li key={requestId}>
-                {requestId}
-                <button onClick={() => acceptFriendRequest(requestId)}>Accept</button>
-                <button onClick={() => rejectFriendRequest(requestId)}>Reject</button>
-              </li>
-            ))}
-          </ul>
-          <input
-            type="text"
-            value={friendId}
-            onChange={(e) => setFriendId(e.target.value)}
-            placeholder="Enter friend ID"
-          />
-          <button onClick={sendFriendRequest}>Send Friend Request</button>
-        </div>
-      )}
-    </div>
-  );
+  async function getFriends(uid) {
+    try {
+      const userDoc = doc(db, 'users', uid);
+      const userSnap = await getDoc(userDoc);
+      if (userSnap.exists()) {
+        setFriends(userSnap.data().friends || []);
+      }
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  }
 }
 
 export default FriendRequestComponent;
