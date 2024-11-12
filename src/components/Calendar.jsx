@@ -68,6 +68,7 @@ export default function Calendar() {
           year={year}
           month={month}
           onMonthChange={handleMonthChange}
+          onClose={closePopup}
         />
         <div className="calendar-days" aria-hidden="true">
           {daysOfWeek.map((day) => (
