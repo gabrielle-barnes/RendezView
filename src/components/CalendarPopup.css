@@ -1,0 +1,98 @@
+.popup-overlay {
+  background-color: #fff6f9;
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  cursor: move;
+}
+
+.popup-overlay h2 {
+  color: #ff6f91;
+  margin-bottom: 15px;
+  font-size: 1.4em;
+}
+
+.popup-overlay input[type="text"],
+.popup-overlay input[type="time"] {
+  width: 90%;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid #ffd1dc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1em;
+  transition: border 0.3s ease;
+}
+
+.popup-overlay input[type="text"]:focus,
+.popup-overlay input[type="time"]:focus {
+  border-color: #ff6f91;
+}
+
+.pop-up-button-section {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: space-between;
+}
+
+.save-button,
+.cancel-button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.save-button {
+  background-color: #ff6f91;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #ff4767;
+}
+
+.cancel-button {
+  background-color: #ffd1dc;
+  color: #ff4767;
+}
+
+.cancel-button:hover {
+  background-color: #ffb0c1;
+}
+
+fieldset {
+  border: 1px solid #ffd1dc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+legend {
+  font-size: 0.9em;
+  color: #ff6f91;
+  padding: 0 5px;
+  font-weight: bold;
+}
+
+.popup-overlay input {
+  padding: 8px;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1em;
+}
+
+.popup-overlay input:focus {
+  border: 1px solid #ff6f91;
+}
