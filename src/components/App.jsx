@@ -10,23 +10,25 @@ import "./App.css";
 
 function App() {
   const user = useAuthentication();
+  const [number, setNumber] = useState(100);
+  const [data, setData] = useState({});
 
-  return (
-    <>
-      <Router>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/profile" element={<UserProfilePage />} />
-            <Route path="/friend" element={<FriendProfilePage />} />
-          </Route>
-        </Routes>
-      </Router>
-      <h1>Plan&Do</h1>
+return (
+  <>
+    <Router>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/friend" element={<FriendProfilePage />} />
+        </Route>
+      </Routes>
+    </Router>
+    <h1>Plan&Do</h1>
 
-      <div className="auth-section">{user ? <SignOut /> : <SignIn />}</div>
-    </>
-  );
+    <div className="auth-section">{user ? <SignOut /> : <SignIn />}</div>
+  </>
+);
 }
 
 export default App;
