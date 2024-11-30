@@ -1,0 +1,25 @@
+.active-events-section {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .events-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .event-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+  }
+  
+  .event-item h3 {
+    margin: 0 0 5px;
+  }
+  
+  .event-item p {
+    margin: 5px 0;
+  }
+  
