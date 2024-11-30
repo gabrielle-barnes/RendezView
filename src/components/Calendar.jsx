@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getEvents } from "../services/calendarService";
 import "./Calendar.css";
 import CalendarHeader from "./CalendarHeader";
 import CalendarPopup from "./CalendarPopup";
@@ -17,7 +18,12 @@ export default function Calendar() {
   const [eventText, setEventText] = useState("");
   const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndTime, setEventEndTime] = useState("");
+  // const [events, setEvents] = useState([]);
 
+  // const refreshEvents = async () => {
+  //   const loadedEvents = await getEvents(userId);
+  //   setEvents(loadedEvents);
+  // }
   const handleEventTitleChange = (e) => {
     setEventTitle(e.target.value);
   };
