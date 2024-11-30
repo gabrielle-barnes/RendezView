@@ -1,0 +1,68 @@
+/* General Styling */
+.profile-header {
+    background-color: lightpink; /* Light pink background for the header */
+    padding: 20px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    color: #333; /* Neutral text color for good contrast */
+  }
+  
+  /* User Info Section */
+  .user-info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Profile Image Styling */
+  .profile-image {
+    width: 150px; /* Fixed width */
+    height: 150px; /* Maintain aspect ratio */
+    border-radius: 50%; /* Make it circular */
+    border: 2px solid #fff; /* White border for contrast */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  /* User Name Styling */
+  .profile-name {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  /* Button Styling */
+  .random-art-button {
+    background-color: #fff; /* White background for contrast */
+    color: lightpink; /* Light pink text */
+    border: 2px solid lightpink;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .random-art-button:hover {
+    background-color: lightpink; /* Invert background and text colors on hover */
+    color: #fff;
+  }
+  
+  /* Friends and Enemies Sections */
+  .user-friends-container,
+  .user-enemies-container {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Bio Section */
+  .user-bio-container {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffe5e5; /* Slightly lighter pink for distinction */
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
