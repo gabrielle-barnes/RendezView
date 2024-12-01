@@ -21,6 +21,7 @@ export async function checkAndCreateUser(user) {
     });
   }
 }
+
 export async function login() {
   const result = await signInWithPopup(auth, new GoogleAuthProvider());
   const user = result.user;
@@ -51,4 +52,9 @@ export function useAuthentication() {
     });
   }, []);
   return user;
+}
+
+export async function updateProfilePhoto(user, photoURL) {
+  const userRef = doc(db, "users", user.uid);
+  await setDoc(userRef, { profilePhoto: photoURL }, { merge: true });
 }
