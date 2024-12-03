@@ -73,14 +73,23 @@
   background-color: #f7e8dc;
 }
 
-.day::before {
-  content: attr(aria-label);
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  font-size: 0.85em;
-  color: #a97155;
+.day-number {
+  font-size: 1.2em;
   font-weight: bold;
+  margin: 0;
+}
+
+.event-marker {
+  width: 6px;
+  height: 6px;
+  background-color: #a97155;
+  border-radius: 50%;
+  margin: 4px 0 0;
+}
+
+.day.highlight {
+  background-color: #f7e8dc;
+  border: 2px solid #a97155;
 }
 
 .empty {

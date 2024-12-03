@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { getEvents } from "../services/calendarService";
+import React, { useState, useEffect } from "react";
+import {
+  initializeGoogleApi,
+  fetchEvents,
+  createEvent,
+} from "../services/googleCalService";
 import "./Calendar.css";
 import CalendarHeader from "./CalendarHeader";
 import CalendarPopup from "./CalendarPopup";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
 const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
 
@@ -18,28 +21,53 @@ export default function Calendar() {
   const [eventText, setEventText] = useState("");
   const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndTime, setEventEndTime] = useState("");
-  // const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]); // Store fetched events
 
-  // const refreshEvents = async () => {
-  //   const loadedEvents = await getEvents(userId);
-  //   setEvents(loadedEvents);
-  // }
-  const handleEventTitleChange = (e) => {
-    setEventTitle(e.target.value);
-  };
+  // Initialize Google API on component mount
+  useEffect(() => {
+    initializeGoogleApi();
+    refreshEvents();
+  }, [year, month]);
 
-  const handleEventTextChange = (e) => {
-    setEventText(e.target.value);
-  };
-  const handleEventStartTimeChange = (e) => {
-    setEventStartTime(e.target.value);
-  };
-  const handleEventEndTimeChange = (e) => {
-    setEventEndTime(e.target.value);
+  // Fetch events from Google Calendar
+  const refreshEvents = async () => {
+    const fetchedEvents = await fetchEvents();
+    setEvents(fetchedEvents);
   };
 
-  const daysInMonth = getDaysInMonth(year, month);
-  const firstDay = getFirstDayOfMonth(year, month);
+  // Add a new event
+  const handleAddEvent = async () => {
+    if (!eventTitle || !eventStartTime || !eventEndTime) {
+      alert("Please fill out all event details.");
+      return;
+    }
+
+    const eventDetails = {
+      summary: eventTitle,
+      description: eventText,
+      start: {
+        dateTime: `${year}-${String(month + 1).padStart(2, "0")}-${String(
+          selectedDay
+        ).padStart(2, "0")}T${eventStartTime}:00`,
+        timeZone: "America/Los_Angeles",
+      },
+      end: {
+        dateTime: `${year}-${String(month + 1).padStart(2, "0")}-${String(
+          selectedDay
+        ).padStart(2, "0")}T${eventEndTime}:00`,
+        timeZone: "America/Los_Angeles",
+      },
+    };
+
+    const newEvent = await createEvent(eventDetails);
+    if (newEvent) {
+      alert(`Event "${eventTitle}" created successfully.`);
+      refreshEvents();
+      closePopup();
+    } else {
+      alert("Failed to create event.");
+    }
+  };
 
   const closePopup = () => {
     setIsPopupOpen(false);
@@ -48,6 +76,7 @@ export default function Calendar() {
     setEventStartTime("");
     setEventEndTime("");
   };
+
   const handleMonthChange = (increment) => {
     setMonth((prev) => {
       let newMonth = prev + increment;
@@ -66,6 +95,16 @@ export default function Calendar() {
     setSelectedDay(day);
     setIsPopupOpen(true);
   };
+
+  const isDayWithEvent = (day) => {
+    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+    return events.some((event) => event.start.dateTime.startsWith(dateStr));
+  };
+
+  const daysInMonth = getDaysInMonth(year, month);
+  const firstDay = getFirstDayOfMonth(year, month);
 
   return (
     <section className="calendar-section" aria-label="Calendar">
@@ -94,11 +133,14 @@ export default function Calendar() {
           {[...Array(daysInMonth)].map((_, i) => (
             <div
               key={i}
-              className="day"
+              className={`day ${isDayWithEvent(i + 1) ? "highlight" : ""}`}
               role="gridcell"
-              aria-label={i + 1}
+              aria-label={`Day ${i + 1}`}
               onClick={() => openPopup(i + 1)}
-            ></div>
+            >
+              <span className="day-number">{i + 1}</span>
+              {isDayWithEvent(i + 1) && <div className="event-marker"></div>}
+            </div>
           ))}
         </div>
       </section>
@@ -110,10 +152,11 @@ export default function Calendar() {
         eventText={eventText}
         eventStartTime={eventStartTime}
         eventEndTime={eventEndTime}
-        onEventTitle={handleEventTitleChange}
-        onEventText={handleEventTextChange}
-        onEventStartTime={handleEventStartTimeChange}
-        onEventEndTime={handleEventEndTimeChange}
+        onEventTitle={(e) => setEventTitle(e.target.value)}
+        onEventText={(e) => setEventText(e.target.value)}
+        onEventStartTime={(e) => setEventStartTime(e.target.value)}
+        onEventEndTime={(e) => setEventEndTime(e.target.value)}
+        onAddEvent={handleAddEvent}
         onClose={closePopup}
       />
     </section>

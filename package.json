@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "firebase": "^11.0.1",
+    "gabi": "^1.0.13",
+    "gapi-script": "^1.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-draggable": "^4.4.6",
