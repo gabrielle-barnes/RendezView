@@ -1,46 +1,44 @@
 import { useState, useEffect } from "react";
+import {
+  sendFriendRequest,
+  acceptFriendRequest,
+  denyFriendRequest,
+  getRelationshipStatus,
+} from "../services/friendService";
 import "./UserCard.css";
-import { getDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db } from "../firebaseConfig";
 
 export default function UserCard({ user, currentUser }) {
-  const [isRequested, setIsRequested] = useState(false);
+  const [relationshipStatus, setRelationshipStatus] = useState("none");
 
   useEffect(() => {
-    const fetchFriendRequests = async () => {
-      if (!user?.id || !currentUser?.uid) return;
-
-      try {
-        const userRef = doc(db, "users", user.id);
-        const userDoc = await getDoc(userRef);
-
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setIsRequested(userData.friendRequests?.includes(currentUser.uid));
-        }
-      } catch (error) {
-        console.error("Error fetching friendRequests:", error.message);
+    const fetchRelationshipStatus = async () => {
+      if (user?.id && currentUser?.uid) {
+        const status = await getRelationshipStatus(currentUser.uid, user.id);
+        setRelationshipStatus(status);
       }
     };
-
-    fetchFriendRequests();
+    fetchRelationshipStatus();
   }, [user, currentUser]);
 
   const handleRequest = async () => {
-    if (isRequested) return;
-
-    try {
-      const userRef = doc(db, "users", user.id);
-
-      await updateDoc(userRef, {
-        friendRequests: arrayUnion(currentUser.uid),
-      });
-
-      setIsRequested(true);
-    } catch (error) {
-      console.error("Error sending friend request:", error.message);
+    if (relationshipStatus === "none") {
+      await sendFriendRequest(currentUser.uid, user.id);
+      setRelationshipStatus("requested");
     }
   };
+
+  const handleAccept = async () => {
+    await acceptFriendRequest(currentUser.uid, user.id);
+    setRelationshipStatus("friends");
+  };
+
+  const handleDeny = async () => {
+    await denyFriendRequest(currentUser.uid, user.id);
+    setRelationshipStatus("none");
+  };
+
+  const isRecipient =
+    relationshipStatus === "requested" && user.id === currentUser.uid;
 
   return (
     <div className="user-card">
@@ -50,13 +48,33 @@ export default function UserCard({ user, currentUser }) {
         className="user-card-image"
       />
       <p className="user-card-name">{user.displayName || "Unknown User"}</p>
-      <button
-        className={`request-button ${isRequested ? "requested" : ""}`}
-        onClick={handleRequest}
-        disabled={isRequested}
-      >
-        {isRequested ? "Requested" : "Request"}
-      </button>
+
+      {/* Dynamic Button Rendering */}
+      {relationshipStatus === "none" && (
+        <button className="request-button" onClick={handleRequest}>
+          Request
+        </button>
+      )}
+      {relationshipStatus === "requested" && isRecipient && (
+        <>
+          <button className="accept-button" onClick={handleAccept}>
+            Accept
+          </button>
+          <button className="deny-button" onClick={handleDeny}>
+            Deny
+          </button>
+        </>
+      )}
+      {relationshipStatus === "requested" && !isRecipient && (
+        <button className="requested-button" disabled>
+          Requested
+        </button>
+      )}
+      {relationshipStatus === "friends" && (
+        <button className="friends-button" disabled>
+          Friends
+        </button>
+      )}
     </div>
   );
 }

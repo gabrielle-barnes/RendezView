@@ -3,12 +3,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  border: 2px solid #ffc0cb; /* Light pink border */
+  border: 2px solid #ffc0cb;
   border-radius: 15px;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   gap: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .user-card:hover {
@@ -20,37 +20,63 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 2px solid #ffb6c1; /* Light pink border */
+  border: 2px solid #ffb6c1;
   object-fit: cover;
-  background-color: #fff;
 }
 
 .user-card-name {
-  flex: 1;
+  flex-grow: 1;
   font-size: 1.1rem;
   color: #333;
   font-weight: bold;
   text-align: left;
 }
 
-.request-button {
-  padding: 0.6rem 1.2rem;
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #ff69b4; /* Hot pink */
+.request-button,
+.accept-button,
+.deny-button,
+.friends-button {
+  padding: 8px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+}
+
+.request-button {
+  background-color: #ff69b4;
+  color: #fff;
 }
 
 .request-button:hover {
-  background-color: #ff1493; /* Deep pink */
+  background-color: #ff1493;
   transform: scale(1.05);
 }
 
-.request-button.requested {
-  background-color: #d3d3d3; /* Grey for disabled state */
+.accept-button {
+  background-color: #6a89cc;
+  color: #fff;
+}
+
+.accept-button:hover {
+  background-color: #4a69bd;
+  transform: scale(1.05);
+}
+
+.deny-button {
+  background-color: #e55039;
+  color: #fff;
+}
+
+.deny-button:hover {
+  background-color: #b33939;
+  transform: scale(1.05);
+}
+
+.friends-button {
+  background-color: #6bcf77;
+  color: #fff;
   cursor: not-allowed;
 }

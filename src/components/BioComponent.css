@@ -1,0 +1,61 @@
+.bio-container {
+  margin-top: 15px;
+  padding: 15px;
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bio-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555; /* Neutral gray for text */
+}
+
+.bio-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 0.9rem;
+  border: 2px solid #ff91a4;
+  border-radius: 10px;
+  outline: none;
+  resize: none;
+  height: 100px;
+  transition: border-color 0.3s ease;
+}
+
+.bio-input:focus {
+  border-color: #ff4f71;
+}
+
+.edit-bio-button,
+.save-bio-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-bio-button {
+  background-color: #6bcf77;
+  color: #ffffff;
+}
+
+.edit-bio-button:hover {
+  background-color: #4aa157;
+}
+
+.save-bio-button {
+  background-color: #ff91a4;
+  color: #ffffff;
+}
+
+.save-bio-button:hover {
+  background-color: #ff4f71;
+}

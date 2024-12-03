@@ -4,26 +4,26 @@
   gap: 1.5rem;
   padding: 2rem;
   border-radius: 15px;
-  background-color: #fff5f8; /* Light pink background */
+  background: linear-gradient(135deg, #ffe5ec, #f2f8ff);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .search-input {
-  padding: 1rem;
+  padding: 12px;
   font-size: 1rem;
-  border: 2px solid #ffc0cb; /* Soft pink border */
-  border-radius: 10px;
+  border: 2px solid #ffc0cb;
+  border-radius: 12px;
   outline: none;
   transition: all 0.3s ease;
 }
 
 .search-input:focus {
-  border-color: #ff69b4; /* Hot pink on focus */
-  background-color: #fff0f5; /* Light lavender background on focus */
+  border-color: #ff69b4;
+  background-color: #fff0f5;
 }
 
 .user-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
