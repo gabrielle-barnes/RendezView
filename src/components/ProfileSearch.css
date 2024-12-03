@@ -1,0 +1,29 @@
+.profile-search {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-radius: 15px;
+  background-color: #fff5f8; /* Light pink background */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px solid #ffc0cb; /* Soft pink border */
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #ff69b4; /* Hot pink on focus */
+  background-color: #fff0f5; /* Light lavender background on focus */
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

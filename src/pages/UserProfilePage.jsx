@@ -1,14 +1,12 @@
 import ProfileHeader from "../components/ProfileHeader";
-import ProfileFriends from "../components/ProfileFriends";
-import ProfileSearch from "../components/ProfileSearch";
+import ProfileFriendSection from "../components/ProfileFriendSection";
 
 export default function UserProfilePage() {
   return (
     <>
       <h1>This is the user profile page</h1>
       <ProfileHeader />
-      <ProfileFriends />
-      <ProfileSearch />
+      <ProfileFriendSection />
     </>
   );
 }

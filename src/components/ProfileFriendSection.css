@@ -1,0 +1,11 @@
+.profile-friends-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.profile-friends-container > * {
+  flex: 1;
+  max-width: 48%;
+}

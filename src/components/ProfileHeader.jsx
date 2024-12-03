@@ -6,9 +6,12 @@ import { db } from "../firebaseConfig";
 import "./ProfileHeader.css";
 
 export default function ProfileHeader() {
-  const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
+  const [profileImage, setProfileImage] = useState(
+    "https://via.placeholder.com/150"
+  );
   const user = useAuthentication();
 
+  //This should be in a service?
   useEffect(() => {
     const fetchProfilePhoto = async () => {
       if (user) {
@@ -17,7 +20,7 @@ export default function ProfileHeader() {
 
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          
+
           if (userData.profilePhoto) {
             setProfileImage(userData.profilePhoto);
           }
@@ -42,22 +45,20 @@ export default function ProfileHeader() {
     <header className="profile-header">
       <section className="user-info-container">
         <section className="user-identity-container">
-          <img
-            src={profileImage}
-            alt="Profile"
-            className="profile-image"
-          />
-          <h2 className="profile-name">{user ? user.displayName : "John Doe"}</h2>
+          <img src={profileImage} alt="Profile" className="profile-image" />
+          <h2 className="profile-name">
+            {user ? user.displayName : "John Doe"}
+          </h2>
         </section>
         <button onClick={handleFetchRandomArt} className="random-art-button">
           Randomize Picture
         </button>
         <section className="user-friends-container">
-          <p>count</p>
+          <p>0</p>
           <p>Friends</p>
         </section>
         <section className="user-enemies-container">
-          <p>count</p>
+          <p>0</p>
           <p>Enemies</p>
         </section>
       </section>
