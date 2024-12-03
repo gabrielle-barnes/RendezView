@@ -7,6 +7,7 @@
   border-radius: 15px;
   background: linear-gradient(135deg, #ffe5ec, #f2f8ff);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 }
 
 .profile-top-row {
@@ -21,7 +22,7 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 3px solid #ff91a4;
+  border: 3px solid dimgray;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   object-fit: cover;
 }
@@ -34,7 +35,7 @@
 }
 
 .random-art-button {
-  background-color: #ff91a4;
+  background-color: dimgray;
   color: #fff;
   border: none;
   padding: 10px 15px;
@@ -47,7 +48,7 @@
 }
 
 .random-art-button:hover {
-  background-color: #6bcf77;
+  background-color: #ffe5ec;
 }
 
 .friends-enemies-container {
@@ -94,7 +95,7 @@
   max-width: 100%;
   padding: 10px;
   font-size: 0.9rem;
-  border: 2px solid #ff91a4;
+  border: 2px solid dimgray;
   border-radius: 10px;
   outline: none;
   resize: none;
@@ -105,12 +106,12 @@
 }
 
 .bio-input:focus {
-  border-color: #ff4f71;
+  border-color: dimgray;
 }
 
 .edit-bio-button,
 .save-bio-button {
-  background-color: #6bcf77;
+  background-color: dimgray;
   color: #ffffff;
   padding: 8px 16px;
   font-size: 0.9rem;
@@ -122,20 +123,60 @@
   margin-top: 10px;
 }
 
-.edit-bio-button {
-  background-color: #6bcf77;
-  color: #ffffff;
-}
-
 .edit-bio-button:hover {
-  background-color: #4aa157;
+  background-color: dimgray;
 }
 
 .save-bio-button {
-  background-color: #ff91a4;
-  color: #ffffff;
+  background-color: dimgray;
 }
 
 .save-bio-button:hover {
-  background-color: #ff4f71;
+  background-color: #ffe5ec;
+}
+
+/* Color Picker Styles */
+.color-picker-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.color-picker-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #3b3b3b;
+}
+
+.color-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.color-option-label {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  width: 50px;
+  height: 50px;
+  transition: border-color 0.3s ease;
+}
+
+.color-option-label:hover {
+  border-color: #555;
+}
+
+.color-option-label input {
+  display: none;
+}
+
+.color-option-label input:checked + & {
+  border-color: #333;
+}
+
+.color-option-label[style] {
+  background-color: inherit;
+  display: block;
 }
