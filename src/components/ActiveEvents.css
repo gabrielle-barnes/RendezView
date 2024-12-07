@@ -1,25 +1,112 @@
 .active-events-section {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .events-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .event-item {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-  }
-  
-  .event-item h3 {
-    margin: 0 0 5px;
-  }
-  
-  .event-item p {
-    margin: 5px 0;
-  }
-  
+  padding: 20px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  font-family: "Arial", sans-serif;
+}
+
+.active-events-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #5f4b8b;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.no-events-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  font-style: italic;
+}
+
+.date-group {
+  margin-bottom: 20px;
+}
+
+.date-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #5f4b8b;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.events-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-item {
+  padding: 20px;
+  margin-bottom: 15px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #fcb69f;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.event-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #5f4b8b;
+}
+
+.event-time {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ff7e5f;
+}
+
+.event-description {
+  font-size: 1rem;
+  color: #333;
+  margin: 5px 0;
+}
+
+.event-description strong {
+  color: #5f4b8b;
+}
+
+.remove-button {
+  padding: 10px 16px;
+  margin-top: 10px;
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.remove-button:hover {
+  background-color: #d9534f;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.remove-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
