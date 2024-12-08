@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
-import Draggable from "react-draggable";
-import { saveEvent } from "../services/calendarService";
-import { useAuthentication } from "../services/authService";
-import "./CalendarPopup.css";
+import React, { useRef } from "react"
+import Draggable from "react-draggable"
+import { saveEvent } from "../services/calendarService"
+import { useAuthentication } from "../services/authService"
+import "./CalendarPopup.css"
 
 export default function CalendarPopup({
   isOpen,
@@ -18,11 +18,11 @@ export default function CalendarPopup({
   onClose,
   onEventSaved,
 }) {
-  const popupRef = useRef(null);
-  const user = useAuthentication();
+  const popupRef = useRef(null)
+  const user = useAuthentication()
 
   async function handleSave() {
-    if (!user) return;
+    if (!user) return
     const eventData = {
       title: eventTitle,
       description: eventText,
@@ -31,14 +31,13 @@ export default function CalendarPopup({
       day: selectedDay,
       month: new Date().getMonth(),
       year: new Date().getFullYear(),
-    };
-
-    const savedEvent = await saveEvent(user.uid, eventData);
-    if (onEventSaved) onEventSaved({ ...eventData, id: savedEvent.id });
-    onClose();
+    }
+    const savedEvent = await saveEvent(user.uid, eventData)
+    if (onEventSaved) onEventSaved({ ...eventData, id: savedEvent.id })
+    onClose()
   }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <section className="popup-section">
@@ -93,5 +92,5 @@ export default function CalendarPopup({
         </form>
       </Draggable>
     </section>
-  );
+  )
 }

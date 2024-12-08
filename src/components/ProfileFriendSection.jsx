@@ -1,6 +1,6 @@
-import ProfileFriends from "./ProfileFriends";
-import ProfileSearch from "./ProfileSearch";
-import "./ProfileFriendSection.css";
+import ProfileFriends from "./ProfileFriends"
+import ProfileSearch from "./ProfileSearch"
+import "./ProfileFriendSection.css"
 
 export default function ProfileFriendSection() {
   return (
@@ -8,5 +8,5 @@ export default function ProfileFriendSection() {
       <ProfileFriends />
       <ProfileSearch />
     </section>
-  );
+  )
 }

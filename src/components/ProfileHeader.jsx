@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
-import { useAuthentication, updateProfilePhoto } from "../services/authService";
-import fetchRandomArt from "../services/fetchRandomArt";
-import BioComponent from "./BioComponent";
-import "./ProfileHeader.css";
+import { useState, useEffect } from "react"
+import { doc, getDoc, updateDoc } from "firebase/firestore"
+import { db } from "../firebaseConfig"
+import { useAuthentication, updateProfilePhoto } from "../services/authService"
+import fetchRandomArt from "../services/fetchRandomArt"
+import BioComponent from "./BioComponent"
+import "./ProfileHeader.css"
 
 export default function ProfileHeader() {
   const [profileImage, setProfileImage] = useState(
     "https://via.placeholder.com/150"
-  );
+  )
   const [friendCount, setFriendCount] = useState(0);
   const [enemyCount, setEnemyCount] = useState(0);
   const [bio, setBio] = useState("");
@@ -27,45 +27,45 @@ export default function ProfileHeader() {
   const fetchProfileData = async () => {
     if (user) {
       try {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
+        const userRef = doc(db, "users", user.uid)
+        const userSnap = await getDoc(userRef)
 
         if (userSnap.exists()) {
-          const userData = userSnap.data();
-          setProfileImage(userData.profilePhoto || profileImage);
-          setFriendCount((userData.friends || []).length);
-          setEnemyCount((userData.enemies || []).length || 0);
-          setBio(userData.bio || "");
-          setProfileColor(userData.profileColor || "#ffe5ec");
+          const userData = userSnap.data()
+          setProfileImage(userData.profilePhoto || profileImage)
+          setFriendCount((userData.friends || []).length)
+          setEnemyCount((userData.enemies || []).length || 0)
+          setBio(userData.bio || "")
+          setProfileColor(userData.profileColor || "#ffe5ec")
         }
       } catch (error) {
-        console.error("Error fetching profile data:", error.message);
+        console.error("Error fetching profile data:", error.message)
       }
     }
-  };
+  }
 
   useEffect(() => {
-    fetchProfileData();
-  }, [user]);
+    fetchProfileData()
+  }, [user])
 
   const handleFetchRandomArt = async () => {
-    const randomArt = await fetchRandomArt();
+    const randomArt = await fetchRandomArt()
     if (randomArt) {
-      setProfileImage(randomArt);
+      setProfileImage(randomArt)
       if (user) {
-        await updateProfilePhoto(user, randomArt);
-        fetchProfileData();
+        await updateProfilePhoto(user, randomArt)
+        fetchProfileData()
       }
     }
-  };
+  }
 
   const handleColorChange = async (color) => {
-    setProfileColor(color);
+    setProfileColor(color)
     if (user) {
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, { profileColor: color });
+      const userRef = doc(db, "users", user.uid)
+      await updateDoc(userRef, { profileColor: color })
     }
-  };
+  }
 
   return (
     <header className="profile-header" style={{ background: profileColor }}>
@@ -113,5 +113,5 @@ export default function ProfileHeader() {
         </div>
       </div>
     </header>
-  );
+  )
 }
