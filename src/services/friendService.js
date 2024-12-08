@@ -4,6 +4,10 @@ import {
   getDoc,
   arrayUnion,
   arrayRemove,
+  collection,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
@@ -17,6 +21,24 @@ export const fetchUserData = async (userId) => {
     return {};
   } catch (error) {
     console.error("Error fetching user data:", error.message);
+    throw error;
+  }
+};
+
+export const fetchUserEvents = async (userId) => {
+  try {
+    const eventsRef = collection(db, "events");
+    const q = query(eventsRef, where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+
+    const events = [];
+    querySnapshot.forEach((doc) => {
+      events.push({ id: doc.id, ...doc.data() });
+    });
+
+    return events;
+  } catch (error) {
+    console.error("Error fetching user events:", error.message);
     throw error;
   }
 };

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Calendar.css";
 import CalendarHeader from "./CalendarHeader";
 import CalendarPopup from "./CalendarPopup";
 import ActiveEvents from "./ActiveEvents";
 
-export default function Calendar() {
+export default function Calendar({
+  events: externalEvents = [],
+  onEventAdded,
+}) {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -13,7 +16,6 @@ export default function Calendar() {
   const [eventText, setEventText] = useState("");
   const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndTime, setEventEndTime] = useState("");
-  const [events, setEvents] = useState([]);
 
   const handleEventTitleChange = (e) => setEventTitle(e.target.value);
   const handleEventTextChange = (e) => setEventText(e.target.value);
@@ -45,22 +47,32 @@ export default function Calendar() {
     });
   };
 
-  const addEventToState = (newEvent) => {
-    setEvents((prevEvents) => {
-      const updatedEvents = [...prevEvents, newEvent];
-      updatedEvents.sort((a, b) => {
-        const dateA = new Date(a.year, a.month, a.day);
-        const dateB = new Date(b.year, b.month, b.day);
-        return dateA - dateB;
-      });
-      return updatedEvents;
-    });
+  const addEventToState = () => {
+    const newEvent = {
+      title: eventTitle,
+      text: eventText,
+      startTime: eventStartTime,
+      endTime: eventEndTime,
+      day: selectedDay,
+      month,
+      year,
+    };
+
+    if (onEventAdded) {
+      onEventAdded(newEvent); // Pass new event to the parent component
+    }
+
+    closePopup();
   };
 
   const openPopup = (day) => {
     setSelectedDay(day);
     setIsPopupOpen(true);
   };
+
+  const filteredEvents = externalEvents.filter(
+    (event) => event.month === month && event.year === year
+  );
 
   return (
     <section className="calendar-section" aria-label="Calendar">
@@ -93,7 +105,17 @@ export default function Calendar() {
               role="gridcell"
               aria-label={i + 1}
               onClick={() => openPopup(i + 1)}
-            ></div>
+            >
+              <div className="events">
+                {filteredEvents
+                  .filter((event) => event.day === i + 1)
+                  .map((event, idx) => (
+                    <div key={idx} className="event">
+                      {event.title}
+                    </div>
+                  ))}
+              </div>
+            </div>
           ))}
         </div>
       </section>
@@ -111,7 +133,7 @@ export default function Calendar() {
         onClose={closePopup}
         onEventSaved={addEventToState}
       />
-      <ActiveEvents onEventChange={(events) => setEvents(events)} />
+      <ActiveEvents />
     </section>
   );
 }

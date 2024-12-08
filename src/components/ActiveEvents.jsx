@@ -1,45 +1,32 @@
 import { useState, useEffect } from "react";
 import { getEvents, removeEvent } from "../services/calendarService";
-import { useAuthentication } from "../services/authService";
 import "./ActiveEvents.css";
 
-export default function ActiveEvents({ onEventChange }) {
+export default function ActiveEvents({ onEventChange, userId }) {
   const [events, setEvents] = useState([]);
-  const user = useAuthentication();
 
   useEffect(() => {
     const fetchEvents = async () => {
-      if (user) {
-        const userEvents = await getEvents(user.uid);
+      if (userId) {
+        console.log("Fetching events for userId:", userId); // Debugging log
+        const userEvents = await getEvents(userId); // Fetch events for the specified userId
         const sortedEvents = userEvents.sort((a, b) => {
           const dateA = new Date(a.year, a.month, a.day);
           const dateB = new Date(b.year, b.month, b.day);
           return dateA - dateB;
         });
         setEvents(sortedEvents);
-        if (onEventChange) onEventChange(sortedEvents);
+        if (onEventChange) onEventChange(sortedEvents); // Notify parent component
       }
     };
 
     fetchEvents();
-  }, [user, onEventChange]);
-
-  const addEventToState = (newEvent) => {
-    setEvents((prevEvents) => {
-      const updatedEvents = [...prevEvents, newEvent];
-      updatedEvents.sort((a, b) => {
-        const dateA = new Date(a.year, a.month, a.day);
-        const dateB = new Date(b.year, b.month, b.day);
-        return dateA - dateB;
-      });
-      return updatedEvents;
-    });
-  };
+  }, [userId, onEventChange]);
 
   const handleRemoveEvent = async (eventId) => {
-    if (user) {
+    if (userId) {
       try {
-        await removeEvent(user.uid, eventId);
+        await removeEvent(userId, eventId);
         setEvents((prevEvents) =>
           prevEvents.filter((event) => event.id !== eventId)
         );
