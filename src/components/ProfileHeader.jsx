@@ -13,7 +13,10 @@ export default function ProfileHeader() {
   const [friendCount, setFriendCount] = useState(0);
   const [enemyCount, setEnemyCount] = useState(0);
   const [bio, setBio] = useState("");
-  const [profileColor, setProfileColor] = useState("#ffe5ec");
+  // Initialize with localStorage value or default
+  const [profileColor, setProfileColor] = useState(
+    localStorage.getItem("userProfileColor") || "#ffe5ec"
+  );
   const user = useAuthentication();
 
   const availableColors = [
@@ -36,7 +39,9 @@ export default function ProfileHeader() {
           setFriendCount((userData.friends || []).length);
           setEnemyCount((userData.enemies || []).length || 0);
           setBio(userData.bio || "");
-          setProfileColor(userData.profileColor || "#ffe5ec");
+          const newColor = userData.profileColor || "#ffe5ec";
+          setProfileColor(newColor);
+          localStorage.setItem("userProfileColor", newColor);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error.message);
@@ -61,6 +66,7 @@ export default function ProfileHeader() {
 
   const handleColorChange = async (color) => {
     setProfileColor(color);
+    localStorage.setItem("userProfileColor", color);
     if (user) {
       const userRef = doc(db, "users", user.uid);
       await updateDoc(userRef, { profileColor: color });

@@ -39,7 +39,6 @@ export default function ActiveEvents({ onEventChange, events: parentEvents }) {
     fetchEvents();
   }, [user]);
 
-  // Update local events when parent events change
   useEffect(() => {
     if (parentEvents) {
       setEvents(parentEvents);

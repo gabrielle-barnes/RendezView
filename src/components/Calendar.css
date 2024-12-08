@@ -1,11 +1,16 @@
+:root {
+  --calendar-background: #ffe5ec;
+}
+
 .calendar {
   width: 100%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #faf2e8;
+  background-color: var(--calendar-background);
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: "Arial", sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .calendar-header {
@@ -43,7 +48,7 @@
 
 .day-name {
   padding: 8px 0;
-  background-color: #f7e8dc;
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   color: #6b4f4f;
   font-weight: bold;
@@ -59,11 +64,11 @@
 .day {
   position: relative;
   height: 80px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 8px;
-  color: #a97155;
+  color: #6b4f4f;
   font-size: 0.85em;
   font-weight: bold;
   transition: background-color 0.3s ease;
@@ -74,14 +79,13 @@
 }
 
 .day:hover {
-  background-color: #f7e8dc;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .empty {
   visibility: hidden;
 }
 
-/* Event indicator styles */
 .event-indicator {
   position: absolute;
   bottom: 8px;
@@ -98,7 +102,6 @@
   box-shadow: 0 2px 4px rgba(169, 113, 85, 0.1);
 }
 
-/* Calendar section wrapper */
 .calendar-section {
   display: flex;
   flex-direction: column;

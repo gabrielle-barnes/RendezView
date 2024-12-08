@@ -81,9 +81,7 @@ function FriendProfilePage() {
 
   return (
     <section className="active-events-section">
-      <h2 className="active-events-title">
-        {friendData.displayName}'s Calendar
-      </h2>
+      <h2 className="active-events-title">{friendData.displayName}'s Events</h2>
       {friendEvents.length > 0 ? (
         <>
           {Object.entries(groupEventsByDate(friendEvents)).map(

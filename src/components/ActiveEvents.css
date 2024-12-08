@@ -1,7 +1,14 @@
 .active-events-section {
   padding: 20px;
   margin-top: 20px;
-  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  background: linear-gradient(
+    135deg,
+    #ffe5ec,
+    #acc8e5,
+    #bfd6b8,
+    #e6e6fa,
+    #fffacd
+  );
   border-radius: 16px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   font-family: "Arial", sans-serif;

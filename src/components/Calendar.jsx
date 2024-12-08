@@ -1,10 +1,19 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import { useAuthentication } from "../services/authService";
 import "./Calendar.css";
 import CalendarHeader from "./CalendarHeader";
 import CalendarPopup from "./CalendarPopup";
 import ActiveEvents from "./ActiveEvents";
 
 export default function Calendar() {
+  const initialColor = localStorage.getItem("userProfileColor") || "#ffe5ec";
+  document.documentElement.style.setProperty(
+    "--calendar-background",
+    initialColor
+  );
+
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -14,6 +23,33 @@ export default function Calendar() {
   const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndTime, setEventEndTime] = useState("");
   const [events, setEvents] = useState([]);
+  const [profileColor, setProfileColor] = useState(initialColor);
+  const user = useAuthentication();
+
+  useEffect(() => {
+    const fetchUserColor = async () => {
+      if (user) {
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            const newColor = userData.profileColor || "#ffe5ec";
+            setProfileColor(newColor);
+            localStorage.setItem("userProfileColor", newColor);
+            document.documentElement.style.setProperty(
+              "--calendar-background",
+              newColor
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching user color:", error);
+        }
+      }
+    };
+
+    fetchUserColor();
+  }, [user]);
 
   const handleEventTitleChange = (e) => setEventTitle(e.target.value);
   const handleEventTextChange = (e) => setEventText(e.target.value);
@@ -59,7 +95,6 @@ export default function Calendar() {
     setIsPopupOpen(true);
   };
 
-  // Helper function to check if a day has events
   const hasEvents = (day) => {
     return events.some(
       (event) =>
