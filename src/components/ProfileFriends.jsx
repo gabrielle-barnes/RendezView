@@ -6,6 +6,7 @@ import {
   removeFriend,
 } from "../services/friendService"
 import { useAuthentication } from "../services/authService"
+import { useNavigate } from "react-router-dom"
 import "./ProfileFriends.css"
 
 export default function ProfileFriends() {
@@ -13,6 +14,7 @@ export default function ProfileFriends() {
   const [friends, setFriends] = useState([])
   const [friendRequests, setFriendRequests] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchFriendsAndRequests = async () => {
@@ -86,6 +88,10 @@ export default function ProfileFriends() {
     }
   }
 
+  const handleFriendClick = (friendId) => {
+    navigate(`/friend/${friendId}`)
+  }
+
   const filteredFriends = friends.filter((friend) =>
     friend.displayName.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -106,7 +112,12 @@ export default function ProfileFriends() {
       <h3>Friends</h3>
       <ul className="friends-list">
         {filteredFriends.map((friend) => (
-          <li key={friend.id} className="friend-item">
+          <li
+            key={friend.id}
+            className="friend-item"
+            onClick={() => handleFriendClick(friend.id)}
+            style={{ cursor: "pointer" }}
+          >
             <img
               src={friend.profilePhoto || "https://via.placeholder.com/50"}
               alt={`${friend.displayName}'s profile`}
@@ -115,7 +126,10 @@ export default function ProfileFriends() {
             <span className="friend-name">{friend.displayName}</span>
             <button
               className="remove-button"
-              onClick={() => handleRemoveFriend(friend.id)}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleRemoveFriend(friend.id)
+              }}
             >
               Remove
             </button>

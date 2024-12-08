@@ -6,6 +6,7 @@ import { Layout } from "../Layout"
 import { SignIn, SignOut } from "../components/Auth"
 import { useAuthentication } from "../services/authService"
 import "./App.css"
+import FriendProfilePage from "../pages/FriendProfilePage"
 
 function App() {
   const user = useAuthentication()
@@ -29,6 +30,8 @@ function App() {
             path="/"
             element={user ? <Navigate to="/homepage" /> : <SignInPage />}
           />
+
+          <Route path="/friend/:friendId" element={<FriendProfilePage />} />
         </Routes>
       </Router>
       <div className="auth-section">{user ? <SignOut /> : <SignIn />}</div>
