@@ -24,8 +24,3 @@ export const removeEvent = async (userId, eventId) => {
   const eventRef = doc(db, "users", userId, "calendar", eventId)
   await deleteDoc(eventRef)
 }
-
-export const removeEvent = async (userId, eventId) => {
-  const eventRef = doc(db, "users", userId, "calendar", eventId);
-  await deleteDoc(eventRef);
-};

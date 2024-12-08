@@ -30,7 +30,7 @@ export default function Calendar() {
     setEventStartTime("")
     setEventEndTime("")
   }
-  
+
   const handleMonthChange = (increment) => {
     setMonth((prev) => {
       let newMonth = prev + increment
@@ -56,18 +56,6 @@ export default function Calendar() {
       return updatedEvents
     })
   }
-
-  const addEventToState = (newEvent) => {
-    setEvents((prevEvents) => {
-      const updatedEvents = [...prevEvents, newEvent];
-      updatedEvents.sort((a, b) => {
-        const dateA = new Date(a.year, a.month, a.day);
-        const dateB = new Date(b.year, b.month, b.day);
-        return dateA - dateB;
-      });
-      return updatedEvents;
-    });
-  };
 
   const openPopup = (day) => {
     setSelectedDay(day)
