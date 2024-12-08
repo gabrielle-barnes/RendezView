@@ -1,5 +1,12 @@
 .popup-overlay {
-  background-color: #fff6f9;
+  background: linear-gradient(
+    135deg,
+    #ffe5ec,
+    #acc8e5,
+    #bfd6b8,
+    #e6e6fa,
+    #fffacd
+  );
   border-radius: 15px;
   padding: 20px;
   width: 300px;
@@ -14,7 +21,7 @@
 }
 
 .popup-overlay h2 {
-  color: #ff6f91;
+  color: #5f4b8b;
   margin-bottom: 15px;
   font-size: 1.4em;
 }
@@ -24,7 +31,7 @@
   width: 90%;
   padding: 8px;
   margin: 8px 0;
-  border: 1px solid #ffd1dc;
+  border: 1px solid #5f4b8b;
   border-radius: 8px;
   outline: none;
   font-size: 1em;
@@ -72,7 +79,7 @@
 }
 
 fieldset {
-  border: 1px solid #ffd1dc;
+  border: 1px solid #5f4b8b;
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 15px;
