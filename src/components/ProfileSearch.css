@@ -4,7 +4,14 @@
   gap: 1.5rem;
   padding: 2rem;
   border-radius: 15px;
-  background: linear-gradient(135deg, #ffe5ec, #f2f8ff);
+  background: linear-gradient(
+    135deg,
+    #ffe5ec,
+    #acc8e5,
+    #bfd6b8,
+    #e6e6fa,
+    #fffacd
+  );
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
