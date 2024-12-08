@@ -1,27 +1,27 @@
-import { useState, useEffect } from "react";
-import { saveUserBio, fetchUserBio } from "../services/userService";
-import "./BioComponent.css";
+import { useState, useEffect } from "react"
+import { saveUserBio, fetchUserBio } from "../services/userService"
+import "./BioComponent.css"
 
 export default function BioComponent({ userId }) {
-  const [bio, setBio] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
+  const [bio, setBio] = useState("")
+  const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
     const loadBio = async () => {
       if (userId) {
-        const userBio = await fetchUserBio(userId);
-        setBio(userBio || "Write something about yourself...");
+        const userBio = await fetchUserBio(userId)
+        setBio(userBio || "Write something about yourself...")
       }
-    };
-    loadBio();
-  }, [userId]);
+    }
+    loadBio()
+  }, [userId])
 
   const handleSaveBio = async () => {
     if (userId) {
-      await saveUserBio(userId, bio);
-      setIsEditing(false);
+      await saveUserBio(userId, bio)
+      setIsEditing(false)
     }
-  };
+  }
 
   return (
     <div className="bio-container">
@@ -49,5 +49,5 @@ export default function BioComponent({ userId }) {
         </>
       )}
     </div>
-  );
+  )
 }

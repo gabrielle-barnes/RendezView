@@ -7,15 +7,15 @@
 ### Features
 
 - **User Profiles:**
-    - View and update your profile picture using art from the Met Museum API.
-    - Add a personalized bio to share more about yourself.
+  - View and update your profile picture using art from the Met Museum API.
+  - Add a personalized bio to share more about yourself.
 - **Friendship Management:**
-    - Search for other users and send friend requests.
-    - Accept or decline incoming friend requests.
+  - Search for other users and send friend requests.
+  - Accept or decline incoming friend requests.
 - **Event Management:**
-    - Create, view, and delete personal events.
+  - Create, view, and delete personal events.
 - **Interactive Calendar:**
-    - Manage your schedule visually and stay on top of upcoming events.
+  - Manage your schedule visually and stay on top of upcoming events.
 
 ### Technologies Used
 

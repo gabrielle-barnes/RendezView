@@ -11,7 +11,7 @@ const monthNames = [
   "October",
   "November",
   "December",
-];
+]
 
 export default function CalendarHeader({
   year,
@@ -23,8 +23,8 @@ export default function CalendarHeader({
     <div className="calendar-header">
       <button
         onClick={() => {
-          onMonthChange(-1);
-          onClose();
+          onMonthChange(-1)
+          onClose()
         }}
         aria-label="Previous Month"
         className="month-button"
@@ -36,8 +36,8 @@ export default function CalendarHeader({
       </div>
       <button
         onClick={() => {
-          onMonthChange(1);
-          onClose();
+          onMonthChange(1)
+          onClose()
         }}
         aria-label="Next Month"
         className="month-button"
@@ -46,5 +46,5 @@ export default function CalendarHeader({
         &#8250; {/* This is the right arrow */}
       </button>
     </div>
-  );
+  )
 }

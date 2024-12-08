@@ -1,27 +1,27 @@
-import { useState, useEffect } from "react";
-import { fetchAllUsers, sendFriendRequest } from "../services/userService";
-import { useAuthentication } from "../services/authService";
-import "./ProfileSearch.css";
-import UserCard from "./UserCard";
+import { useState, useEffect } from "react"
+import { fetchAllUsers, sendFriendRequest } from "../services/userService"
+import { useAuthentication } from "../services/authService"
+import "./ProfileSearch.css"
+import UserCard from "./UserCard"
 
 export default function ProfileSearch() {
-  const [users, setUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const currentUser = useAuthentication();
+  const [users, setUsers] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const currentUser = useAuthentication()
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const allUsers = await fetchAllUsers();
-      setUsers(allUsers);
-    };
-    fetchUsers();
-  }, []);
+      const allUsers = await fetchAllUsers()
+      setUsers(allUsers)
+    }
+    fetchUsers()
+  }, [])
 
   const filteredUsers = users.filter(
     (user) =>
       user.displayName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       user.id !== currentUser?.uid
-  );
+  )
 
   return (
     <section className="profile-search">
@@ -47,5 +47,5 @@ export default function ProfileSearch() {
         )}
       </section>
     </section>
-  );
+  )
 }
