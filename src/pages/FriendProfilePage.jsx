@@ -1,52 +1,134 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { fetchUserData } from "../services/friendService"; // Import existing function
-import { getEvents } from "../services/calendarService"; // Import `getEvents` function
+import { useParams, Navigate } from "react-router-dom";
+import { fetchUserData } from "../services/friendService";
+import { useAuthentication } from "../services/authService";
 import Calendar from "../components/Calendar";
+import "../components/ActiveEvents.css";
 
 function FriendProfilePage() {
-  const { friendId } = useParams(); // Extract friendId from URL
-  const [friendData, setFriendData] = useState(null); // State for friend's profile
-  const [friendEvents, setFriendEvents] = useState([]); // State for friend's events
+  const { friendId } = useParams();
+  const [friendData, setFriendData] = useState(null);
+  const [friendEvents, setFriendEvents] = useState([]);
+  const [error, setError] = useState(null);
+  const currentUser = useAuthentication();
 
   useEffect(() => {
-    // Fetch friend's profile data
-    const fetchFriendData = async () => {
+    const loadFriendData = async () => {
+      if (!friendId || !currentUser) return;
+
+      if (friendId === currentUser.uid) {
+        setError("redirect");
+        return;
+      }
+
       try {
-        const data = await fetchUserData(friendId); // Fetch profile using friendId
+        console.log("Fetching friend data for:", friendId);
+        const data = await fetchUserData(friendId);
+
+        if (!data.friends?.includes(currentUser.uid)) {
+          setError("You must be friends with this user to view their calendar");
+          return;
+        }
+
+        console.log("Friend data received:", data);
+        const events = data.events || [];
+        console.log("Friend events:", events);
+
+        const eventsWithIds = events.map((event) => ({
+          ...event,
+          id:
+            event.id ||
+            `${event.day}-${event.month}-${event.year}-${event.startTime}`.replace(
+              /\s/g,
+              ""
+            ),
+        }));
+
+        const sortedEvents = eventsWithIds.sort((a, b) => {
+          const dateA = new Date(a.year, a.month, a.day);
+          const dateB = new Date(b.year, b.month, b.day);
+          return dateA - dateB;
+        });
+
         setFriendData(data);
+        setFriendEvents(sortedEvents);
+        setError(null);
       } catch (error) {
-        console.error("Error fetching friend's data:", error.message);
+        console.error("Error loading friend's data:", error);
+        setError("Unable to load calendar data. Please try again later.");
       }
     };
 
-    // Fetch friend's events from Firestore
-    const fetchFriendEvents = async () => {
-      try {
-        console.log("Fetching events for friendId:", friendId); // Debug log
-        const events = await getEvents(friendId); // Fetch events using friendId
-        console.log("Fetched friend's events:", events); // Debug log
-        setFriendEvents(events); // Update state with fetched events
-      } catch (error) {
-        console.error("Error fetching friend's events:", error.message);
-      }
-    };
+    loadFriendData();
+  }, [friendId, currentUser]);
 
-    // Trigger both profile and event fetching
-    fetchFriendData();
-    fetchFriendEvents();
-  }, [friendId]);
+  if (error === "redirect") {
+    return <Navigate to="/profile" replace />;
+  }
+
+  if (error && error !== "redirect") {
+    return (
+      <div className="error-message">
+        <h2>Error</h2>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   if (!friendData) {
-    return <p>Loading friend's data...</p>; // Show a loading message while fetching
+    return <div>Loading friend's profile...</div>;
   }
 
   return (
-    <div>
-      <h1>{friendData.displayName}'s Calendar</h1> {/* Friend's display name */}
-      <Calendar events={friendEvents} /> {/* Pass fetched events to Calendar */}
-    </div>
+    <section className="active-events-section">
+      <h2 className="active-events-title">
+        {friendData.displayName}'s Calendar
+      </h2>
+      {friendEvents.length > 0 ? (
+        <>
+          {Object.entries(groupEventsByDate(friendEvents)).map(
+            ([date, dateEvents]) => (
+              <div key={date} className="date-group">
+                <h3 className="date-title">{date}</h3>
+                <ul className="events-list">
+                  {dateEvents.map((event) => (
+                    <li key={event.id} className="event-item">
+                      <section className="event-header">
+                        <h3 className="event-title">{event.title}</h3>
+                        <p className="event-time">
+                          <strong>Time:</strong> {event.startTime} -{" "}
+                          {event.endTime}
+                        </p>
+                      </section>
+                      {event.description && (
+                        <p className="event-description">
+                          <strong>Description:</strong> {event.description}
+                        </p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          )}
+          <Calendar events={friendEvents} />
+        </>
+      ) : (
+        <p className="no-events-message">No events to display</p>
+      )}
+    </section>
   );
+}
+
+function groupEventsByDate(events) {
+  return events.reduce((groups, event) => {
+    const date = `${event.month + 1}/${event.day}/${event.year}`;
+    if (!groups[date]) {
+      groups[date] = [];
+    }
+    groups[date].push(event);
+    return groups;
+  }, {});
 }
 
 export default FriendProfilePage;

@@ -62,27 +62,48 @@
   background-color: #fff;
   border-radius: 8px;
   border: 1px solid #e0e0e0;
-  text-align: left;
   padding: 8px;
-  color: #6b4f4f;
-  font-size: 1em;
+  color: #a97155;
+  font-size: 0.85em;
+  font-weight: bold;
   transition: background-color 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .day:hover {
   background-color: #f7e8dc;
 }
 
-.day::before {
-  content: attr(aria-label);
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  font-size: 0.85em;
-  color: #a97155;
-  font-weight: bold;
-}
-
 .empty {
   visibility: hidden;
+}
+
+/* Event indicator styles */
+.event-indicator {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #a97155;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(169, 113, 85, 0.3);
+}
+
+.has-events {
+  border-color: #a97155;
+  box-shadow: 0 2px 4px rgba(169, 113, 85, 0.1);
+}
+
+/* Calendar section wrapper */
+.calendar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }

@@ -1,12 +1,10 @@
 import {
   doc,
-  updateDoc,
   getDoc,
+  updateDoc,
   arrayUnion,
   arrayRemove,
   collection,
-  query,
-  where,
   getDocs,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -15,6 +13,7 @@ export const fetchUserData = async (userId) => {
   try {
     const userRef = doc(db, "users", userId);
     const userSnap = await getDoc(userRef);
+
     if (userSnap.exists()) {
       return userSnap.data();
     }
@@ -25,30 +24,57 @@ export const fetchUserData = async (userId) => {
   }
 };
 
-export const fetchUserEvents = async (userId) => {
+export const fetchUserEvents = async (userId, friendIds = []) => {
   try {
-    const eventsRef = collection(db, "events");
-    const q = query(eventsRef, where("userId", "==", userId));
-    const querySnapshot = await getDocs(q);
+    console.log(`Fetching events for userId: ${userId}`);
 
-    const events = [];
-    querySnapshot.forEach((doc) => {
-      events.push({ id: doc.id, ...doc.data() });
-    });
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
 
-    return events;
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      console.log("Fetched data from Firebase:", userData);
+
+      const eventsRef = collection(userRef, "calendar");
+      const eventsSnapshot = await getDocs(eventsRef);
+
+      const events = [];
+      eventsSnapshot.forEach((doc) => {
+        const eventData = doc.data();
+        console.log("Event data:", eventData);
+
+        if (
+          userId === eventData.userId ||
+          friendIds.includes(eventData.userId)
+        ) {
+          events.push({ id: doc.id, ...eventData });
+        }
+      });
+
+      console.log("Fetched events:", events);
+      return events;
+    } else {
+      console.warn(`User with ID ${userId} not found`);
+      return [];
+    }
   } catch (error) {
     console.error("Error fetching user events:", error.message);
     throw error;
   }
 };
-
-export const sendFriendRequest = async (userId, recipientId) => {
+export const sendFriendRequest = async (targetUserId, currentUserId) => {
   try {
-    const recipientRef = doc(db, "users", recipientId);
-    await updateDoc(recipientRef, {
-      friendRequests: arrayUnion(userId),
+    if (!targetUserId || !currentUserId) {
+      throw new Error("Invalid user IDs");
+    }
+
+    const userRef = doc(db, "users", targetUserId);
+
+    await updateDoc(userRef, {
+      friendRequests: arrayUnion(currentUserId),
     });
+
+    console.log("Friend request sent successfully!");
   } catch (error) {
     console.error("Error sending friend request:", error.message);
     throw error;
@@ -118,6 +144,43 @@ export const getRelationshipStatus = async (userId, otherUserId) => {
     return "none";
   } catch (error) {
     console.error("Error checking relationship status:", error.message);
+    throw error;
+  }
+};
+
+export const fetchAllUsers = async () => {
+  try {
+    const snapshot = await getDocs(collection(db, "users"));
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error("Error fetching all users:", error.message);
+    throw error;
+  }
+};
+
+export const fetchUserBio = async (userId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      return userDoc.data().bio || "";
+    }
+    return "";
+  } catch (error) {
+    console.error("Error fetching user bio:", error.message);
+    throw error;
+  }
+};
+
+export const saveUserBio = async (userId, bio) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, { bio });
+  } catch (error) {
+    console.error("Error saving user bio:", error.message);
     throw error;
   }
 };
