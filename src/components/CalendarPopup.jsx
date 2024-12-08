@@ -32,7 +32,6 @@ export default function CalendarPopup({
       month: new Date().getMonth(),
       year: new Date().getFullYear(),
     }
-
     const savedEvent = await saveEvent(user.uid, eventData)
     if (onEventSaved) onEventSaved({ ...eventData, id: savedEvent.id })
     onClose()

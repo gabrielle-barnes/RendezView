@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { doc, getDoc } from "firebase/firestore"
+import { doc, getDoc, updateDoc } from "firebase/firestore"
 import { db } from "../firebaseConfig"
 import { useAuthentication, updateProfilePhoto } from "../services/authService"
 import fetchRandomArt from "../services/fetchRandomArt"
@@ -10,10 +10,19 @@ export default function ProfileHeader() {
   const [profileImage, setProfileImage] = useState(
     "https://via.placeholder.com/150"
   )
-  const [friendCount, setFriendCount] = useState(0)
-  const [enemyCount, setEnemyCount] = useState(0)
-  const [bio, setBio] = useState("")
-  const user = useAuthentication()
+  const [friendCount, setFriendCount] = useState(0);
+  const [enemyCount, setEnemyCount] = useState(0);
+  const [bio, setBio] = useState("");
+  const [profileColor, setProfileColor] = useState("#ffe5ec");
+  const user = useAuthentication();
+
+  const availableColors = [
+    { color: "#ffe5ec" },
+    { color: "#ACC8E5" },
+    { color: "#bfd6b8" },
+    { color: "#E6E6FA" },
+    { color: "#FFFACD" },
+  ];
 
   const fetchProfileData = async () => {
     if (user) {
@@ -27,6 +36,7 @@ export default function ProfileHeader() {
           setFriendCount((userData.friends || []).length)
           setEnemyCount((userData.enemies || []).length || 0)
           setBio(userData.bio || "")
+          setProfileColor(userData.profileColor || "#ffe5ec")
         }
       } catch (error) {
         console.error("Error fetching profile data:", error.message)
@@ -49,12 +59,16 @@ export default function ProfileHeader() {
     }
   }
 
-  const handleBioUpdate = (updatedBio) => {
-    setBio(updatedBio)
+  const handleColorChange = async (color) => {
+    setProfileColor(color)
+    if (user) {
+      const userRef = doc(db, "users", user.uid)
+      await updateDoc(userRef, { profileColor: color })
+    }
   }
 
   return (
-    <header className="profile-header">
+    <header className="profile-header" style={{ background: profileColor }}>
       <div className="profile-top-row">
         <div className="profile-identity-container">
           <img src={profileImage} alt="Profile" className="profile-image" />
@@ -76,6 +90,28 @@ export default function ProfileHeader() {
       </div>
 
       <BioComponent userId={user?.uid} />
+
+      <div className="color-picker-container">
+        <h3 className="color-picker-title">Profile Colors</h3>
+        <div className="color-options">
+          {availableColors.map((colorOption) => (
+            <label
+              key={colorOption.color}
+              className="color-option-label"
+              style={{ backgroundColor: colorOption.color }}
+            >
+              <input
+                type="radio"
+                name="profile-color"
+                value={colorOption.color}
+                checked={profileColor === colorOption.color}
+                onChange={() => handleColorChange(colorOption.color)}
+              />
+              {colorOption.label}
+            </label>
+          ))}
+        </div>
+      </div>
     </header>
   )
 }
