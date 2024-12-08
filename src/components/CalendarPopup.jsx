@@ -16,13 +16,13 @@ export default function CalendarPopup({
   onEventStartTime,
   onEventEndTime,
   onClose,
+  onEventSaved,
 }) {
   const popupRef = useRef(null);
-
   const user = useAuthentication();
 
   async function handleSave() {
-    if(!user) return
+    if (!user) return;
     const eventData = {
       title: eventTitle,
       description: eventText,
@@ -31,72 +31,67 @@ export default function CalendarPopup({
       day: selectedDay,
       month: new Date().getMonth(),
       year: new Date().getFullYear(),
-    }
-    await saveEvent(user.uid, eventData)
-    
-    onClose()
+    };
+
+    const savedEvent = await saveEvent(user.uid, eventData);
+    if (onEventSaved) onEventSaved({ ...eventData, id: savedEvent.id });
+    onClose();
   }
 
   if (!isOpen) return null;
 
   return (
     <section className="popup-section">
-      {isOpen && (
-        <Draggable nodeRef={popupRef}>
-          <form ref={popupRef} className="popup-overlay">
-            <fieldset>
-              <legend>Event Title</legend>
-              <input
-                className="event-title"
-                type="text"
-                placeholder="Event Title"
-                value={eventTitle}
-                onChange={onEventTitle}
-              />
-            </fieldset>
-            <fieldset>
-              <legend>Event Description</legend>
-              <input
-                className="event-description"
-                type="text"
-                placeholder="What do you have today!"
-                value={eventText}
-                onChange={onEventText}
-              />
-            </fieldset>
-            <fieldset>
-              <legend>Start Time</legend>
-              <input
-                className="event-start-time"
-                type="time"
-                value={eventStartTime}
-                onChange={onEventStartTime}
-              />
-            </fieldset>
-            <fieldset>
-              <legend>End Time</legend>
-              <input
-                className="event-end-time"
-                type="time"
-                value={eventEndTime}
-                onChange={onEventEndTime}
-              />
-            </fieldset>
-            <section className="pop-up-button-section">
-              <button
-                className="save-button"
-                type="button"
-                onClick={handleSave}
-              >
-                Save
-              </button>
-              <button className="cancel-button" type="button" onClick={onClose}>
-                Cancel
-              </button>
-            </section>
-          </form>
-        </Draggable>
-      )}
+      <Draggable nodeRef={popupRef}>
+        <form ref={popupRef} className="popup-overlay">
+          <fieldset>
+            <legend>Event Title</legend>
+            <input
+              className="event-title"
+              type="text"
+              placeholder="Event Title"
+              value={eventTitle}
+              onChange={onEventTitle}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>Event Description</legend>
+            <input
+              className="event-description"
+              type="text"
+              placeholder="What do you have today!"
+              value={eventText}
+              onChange={onEventText}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>Start Time</legend>
+            <input
+              className="event-start-time"
+              type="time"
+              value={eventStartTime}
+              onChange={onEventStartTime}
+            />
+          </fieldset>
+          <fieldset>
+            <legend>End Time</legend>
+            <input
+              className="event-end-time"
+              type="time"
+              value={eventEndTime}
+              onChange={onEventEndTime}
+            />
+          </fieldset>
+          <section className="pop-up-button-section">
+            <button className="save-button" type="button" onClick={handleSave}>
+              Save
+            </button>
+            <button className="cancel-button" type="button" onClick={onClose}>
+              Cancel
+            </button>
+          </section>
+        </form>
+      </Draggable>
     </section>
   );
 }

@@ -1,11 +1,18 @@
-import { doc, collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  deleteDoc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 export async function saveEvent(userId, eventData) {
   const userRef = doc(db, "users", userId);
   const calendarRef = collection(userRef, "calendar");
 
-  await addDoc(calendarRef, eventData);
+  const docRef = await addDoc(calendarRef, eventData);
+  return { id: docRef.id };
 }
 
 export async function getEvents(userId) {
@@ -18,3 +25,8 @@ export async function getEvents(userId) {
   });
   return events;
 }
+
+export const removeEvent = async (userId, eventId) => {
+  const eventRef = doc(db, "users", userId, "calendar", eventId);
+  await deleteDoc(eventRef);
+};

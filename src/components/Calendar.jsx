@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import { getEvents } from "../services/calendarService";
 import "./Calendar.css";
 import CalendarHeader from "./CalendarHeader";
 import CalendarPopup from "./CalendarPopup";
-
-const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
-const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+import ActiveEvents from "./ActiveEvents";
 
 export default function Calendar() {
   const [month, setMonth] = useState(new Date().getMonth());
@@ -18,28 +13,15 @@ export default function Calendar() {
   const [eventText, setEventText] = useState("");
   const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndTime, setEventEndTime] = useState("");
-  // const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]);
 
-  // const refreshEvents = async () => {
-  //   const loadedEvents = await getEvents(userId);
-  //   setEvents(loadedEvents);
-  // }
-  const handleEventTitleChange = (e) => {
-    setEventTitle(e.target.value);
-  };
+  const handleEventTitleChange = (e) => setEventTitle(e.target.value);
+  const handleEventTextChange = (e) => setEventText(e.target.value);
+  const handleEventStartTimeChange = (e) => setEventStartTime(e.target.value);
+  const handleEventEndTimeChange = (e) => setEventEndTime(e.target.value);
 
-  const handleEventTextChange = (e) => {
-    setEventText(e.target.value);
-  };
-  const handleEventStartTimeChange = (e) => {
-    setEventStartTime(e.target.value);
-  };
-  const handleEventEndTimeChange = (e) => {
-    setEventEndTime(e.target.value);
-  };
-
-  const daysInMonth = getDaysInMonth(year, month);
-  const firstDay = getFirstDayOfMonth(year, month);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(year, month, 1).getDay();
 
   const closePopup = () => {
     setIsPopupOpen(false);
@@ -48,6 +30,7 @@ export default function Calendar() {
     setEventStartTime("");
     setEventEndTime("");
   };
+
   const handleMonthChange = (increment) => {
     setMonth((prev) => {
       let newMonth = prev + increment;
@@ -59,6 +42,18 @@ export default function Calendar() {
         setYear((prevYear) => prevYear - 1);
       }
       return newMonth;
+    });
+  };
+
+  const addEventToState = (newEvent) => {
+    setEvents((prevEvents) => {
+      const updatedEvents = [...prevEvents, newEvent];
+      updatedEvents.sort((a, b) => {
+        const dateA = new Date(a.year, a.month, a.day);
+        const dateB = new Date(b.year, b.month, b.day);
+        return dateA - dateB;
+      });
+      return updatedEvents;
     });
   };
 
@@ -77,7 +72,7 @@ export default function Calendar() {
           onClose={closePopup}
         />
         <div className="calendar-days" aria-hidden="true">
-          {daysOfWeek.map((day) => (
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
             <div key={day} className="day-name">
               {day}
             </div>
@@ -102,7 +97,6 @@ export default function Calendar() {
           ))}
         </div>
       </section>
-
       <CalendarPopup
         isOpen={isPopupOpen}
         selectedDay={selectedDay}
@@ -115,7 +109,9 @@ export default function Calendar() {
         onEventStartTime={handleEventStartTimeChange}
         onEventEndTime={handleEventEndTimeChange}
         onClose={closePopup}
+        onEventSaved={addEventToState}
       />
+      <ActiveEvents onEventChange={(events) => setEvents(events)} />
     </section>
   );
 }
