@@ -1,7 +1,7 @@
 export default function HomePage() {
   return (
     <>
-      <h1>This is the Sign In page</h1>
+      <h2>Please sign in to use the calendar and profile!</h2>
     </>
   )
 }

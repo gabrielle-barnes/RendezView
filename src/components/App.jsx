@@ -31,8 +31,6 @@ function App() {
           />
         </Routes>
       </Router>
-
-      <h1>RendezView</h1>
       <div className="auth-section">{user ? <SignOut /> : <SignIn />}</div>
     </>
   )

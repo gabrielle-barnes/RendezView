@@ -10,11 +10,11 @@ export default function ProfileHeader() {
   const [profileImage, setProfileImage] = useState(
     "https://via.placeholder.com/150"
   )
-  const [friendCount, setFriendCount] = useState(0);
-  const [enemyCount, setEnemyCount] = useState(0);
-  const [bio, setBio] = useState("");
-  const [profileColor, setProfileColor] = useState("#ffe5ec");
-  const user = useAuthentication();
+  const [friendCount, setFriendCount] = useState(0)
+  const [enemyCount, setEnemyCount] = useState(0)
+  const [bio, setBio] = useState("")
+  const [profileColor, setProfileColor] = useState("#ffe5ec")
+  const user = useAuthentication()
 
   const availableColors = [
     { color: "#ffe5ec" },
@@ -22,7 +22,7 @@ export default function ProfileHeader() {
     { color: "#bfd6b8" },
     { color: "#E6E6FA" },
     { color: "#FFFACD" },
-  ];
+  ]
 
   const fetchProfileData = async () => {
     if (user) {
