@@ -16,7 +16,6 @@ export async function checkAndCreateUser(user) {
       enemies: [],
       friendRequests: [],
       friends: [],
-      enemies: [],
       profilePhoto: "",
     })
   }
@@ -27,15 +26,14 @@ export async function login() {
   const user = result.user
 
   await checkAndCreateUser(user)
+  window.location.replace("#/homepage")
   return user
 }
 
 export function logout() {
-  return signOut(auth)
-}
-
-export function loggedInUserDisplayName() {
-  return auth.currentUser.displayName
+  return signOut(auth).then(() => {
+    window.location.replace("/")
+  })
 }
 
 export function useAuthentication() {
