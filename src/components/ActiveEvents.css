@@ -1,6 +1,6 @@
 .active-events-section {
+  width: 400px;
   padding: 20px;
-  margin-top: 20px;
   background: linear-gradient(
     135deg,
     #ffe5ec,
@@ -9,25 +9,21 @@
     #e6e6fa,
     #fffacd
   );
-  border-radius: 16px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  font-family: "Arial", sans-serif;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .active-events-title {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
   color: #5f4b8b;
+  font-size: 1.5em;
   margin-bottom: 20px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 .no-events-message {
   text-align: center;
-  font-size: 1.2rem;
-  color: #555;
-  font-style: italic;
+  color: #5f4b8b;
+  padding: 20px;
 }
 
 .date-group {
@@ -35,11 +31,9 @@
 }
 
 .date-title {
-  font-size: 1.5rem;
-  font-weight: bold;
   color: #5f4b8b;
+  font-size: 1.2em;
   margin-bottom: 10px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .events-list {
@@ -49,71 +43,49 @@
 }
 
 .event-item {
-  padding: 20px;
-  margin-bottom: 15px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.event-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .event-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #fcb69f;
-  padding-bottom: 10px;
   margin-bottom: 10px;
 }
 
 .event-title {
-  font-size: 1.5rem;
-  font-weight: bold;
   color: #5f4b8b;
+  margin: 0;
+  font-size: 1.1em;
 }
 
 .event-time {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #ff7e5f;
+  color: #ff91a4;
+  margin: 0;
+  font-size: 0.9em;
 }
 
 .event-description {
-  font-size: 1rem;
-  color: #333;
-  margin: 5px 0;
-}
-
-.event-description strong {
-  color: #5f4b8b;
+  color: #6b4f4f;
+  margin: 10px 0;
+  font-size: 0.9em;
 }
 
 .remove-button {
-  padding: 10px 16px;
-  margin-top: 10px;
-  background-color: #ff6f61;
-  color: white;
+  background-color: #ffb6c1;
+  color: #5f4b8b;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
+  border-radius: 4px;
+  padding: 5px 10px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
 }
 
 .remove-button:hover {
-  background-color: #d9534f;
-  transform: scale(1.05);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-}
-
-.remove-button:active {
-  transform: scale(0.95);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ff9aa2;
 }
