@@ -1,0 +1,44 @@
+body {
+  background-color: #f7f7f7;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 100px;
+  font-size: 24px;
+  color: #333;
+  padding: 20px;
+  background-color: #f0e5eac4;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #e9ecef;
+}
+
+.sign-in-button {
+  background: linear-gradient(
+    135deg,
+    #ffe5ec,
+    #acc8e5,
+    #bfd6b8,
+    #e6e6fa,
+    #fffacd
+  );
+}
+
+.sign-in-button:hover {
+  background: linear-gradient(
+    135deg,
+    #e5b3c4,
+    #8ab3cc,
+    #9cb68c,
+    #d0d0e8,
+    #f2e6a2
+  );
+}
