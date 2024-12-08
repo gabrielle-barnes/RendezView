@@ -1,5 +1,4 @@
 import Calendar from "../components/Calendar";
-import ActiveEvents from "../components/ActiveEvents";
 
 export default function HomePage() {
   return (

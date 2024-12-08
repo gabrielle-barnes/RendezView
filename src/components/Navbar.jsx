@@ -4,13 +4,10 @@ export function Navbar() {
     return (
         <>
             <Link to="/">
-                <button>HomePage</button>
+                <button>Home</button>
             </Link>
             <Link to="/profile">
-                <button>UserProfilePage</button>
-            </Link>
-            <Link to="/friend">
-                <button>FriendProfilePage</button>
+                <button>Your Profile</button>
             </Link>
         </>
     )
