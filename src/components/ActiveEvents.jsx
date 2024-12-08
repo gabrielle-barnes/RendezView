@@ -1,17 +1,17 @@
-import { useState, useEffect, useCallback } from "react";
-import { getEvents, removeEvent } from "../services/calendarService";
-import { useAuthentication } from "../services/authService";
-import "./ActiveEvents.css";
+import { useState, useEffect, useCallback } from "react"
+import { getEvents, removeEvent } from "../services/calendarService"
+import { useAuthentication } from "../services/authService"
+import "./ActiveEvents.css"
 
 export default function ActiveEvents({ onEventChange, events: parentEvents }) {
-  const [events, setEvents] = useState([]);
-  const user = useAuthentication();
+  const [events, setEvents] = useState([])
+  const user = useAuthentication()
 
   useEffect(() => {
     const fetchEvents = async () => {
       if (user) {
         try {
-          const userEvents = await getEvents(user.uid);
+          const userEvents = await getEvents(user.uid)
           const eventsWithIds = userEvents.map((event) => ({
             ...event,
             id:
@@ -20,35 +20,35 @@ export default function ActiveEvents({ onEventChange, events: parentEvents }) {
                 /\s/g,
                 ""
               ),
-          }));
+          }))
 
           const sortedEvents = eventsWithIds.sort((a, b) => {
-            const dateA = new Date(a.year, a.month, a.day);
-            const dateB = new Date(b.year, b.month, b.day);
-            return dateA - dateB;
-          });
+            const dateA = new Date(a.year, a.month, a.day)
+            const dateB = new Date(b.year, b.month, b.day)
+            return dateA - dateB
+          })
 
-          setEvents(sortedEvents);
-          if (onEventChange) onEventChange(sortedEvents);
+          setEvents(sortedEvents)
+          if (onEventChange) onEventChange(sortedEvents)
         } catch (error) {
-          console.error("Error fetching events:", error);
+          console.error("Error fetching events:", error)
         }
       }
-    };
+    }
 
-    fetchEvents();
-  }, [user]);
+    fetchEvents()
+  }, [user])
 
   useEffect(() => {
     if (parentEvents) {
-      setEvents(parentEvents);
+      setEvents(parentEvents)
     }
-  }, [parentEvents]);
+  }, [parentEvents])
 
   const handleRemoveEvent = async (eventToRemove) => {
     if (user) {
       try {
-        await removeEvent(user.uid, eventToRemove);
+        await removeEvent(user.uid, eventToRemove)
         const updatedEvents = events.filter(
           (event) =>
             !(
@@ -58,23 +58,23 @@ export default function ActiveEvents({ onEventChange, events: parentEvents }) {
               event.startTime === eventToRemove.startTime &&
               event.title === eventToRemove.title
             )
-        );
-        setEvents(updatedEvents);
-        if (onEventChange) onEventChange(updatedEvents);
+        )
+        setEvents(updatedEvents)
+        if (onEventChange) onEventChange(updatedEvents)
       } catch (error) {
-        console.error("Error removing event:", error);
+        console.error("Error removing event:", error)
       }
     }
-  };
+  }
 
   const groupedEvents = events.reduce((groups, event) => {
-    const date = `${event.month + 1}/${event.day}/${event.year}`;
+    const date = `${event.month + 1}/${event.day}/${event.year}`
     if (!groups[date]) {
-      groups[date] = [];
+      groups[date] = []
     }
-    groups[date].push(event);
-    return groups;
-  }, {});
+    groups[date].push(event)
+    return groups
+  }, {})
 
   return (
     <section className="active-events-section">
@@ -114,5 +114,5 @@ export default function ActiveEvents({ onEventChange, events: parentEvents }) {
         ))
       )}
     </section>
-  );
+  )
 }

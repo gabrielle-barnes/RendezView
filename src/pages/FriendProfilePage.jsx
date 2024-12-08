@@ -1,38 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
-import { fetchUserData } from "../services/friendService";
-import { useAuthentication } from "../services/authService";
-import Calendar from "../components/Calendar";
-import "../components/ActiveEvents.css";
+import React, { useEffect, useState } from "react"
+import { useParams, Navigate } from "react-router-dom"
+import { fetchUserData } from "../services/friendService"
+import { useAuthentication } from "../services/authService"
+import Calendar from "../components/Calendar"
+import "../components/ActiveEvents.css"
 
 function FriendProfilePage() {
-  const { friendId } = useParams();
-  const [friendData, setFriendData] = useState(null);
-  const [friendEvents, setFriendEvents] = useState([]);
-  const [error, setError] = useState(null);
-  const currentUser = useAuthentication();
+  const { friendId } = useParams()
+  const [friendData, setFriendData] = useState(null)
+  const [friendEvents, setFriendEvents] = useState([])
+  const [error, setError] = useState(null)
+  const currentUser = useAuthentication()
 
   useEffect(() => {
     const loadFriendData = async () => {
-      if (!friendId || !currentUser) return;
+      if (!friendId || !currentUser) return
 
       if (friendId === currentUser.uid) {
-        setError("redirect");
-        return;
+        setError("redirect")
+        return
       }
 
       try {
-        console.log("Fetching friend data for:", friendId);
-        const data = await fetchUserData(friendId);
+        console.log("Fetching friend data for:", friendId)
+        const data = await fetchUserData(friendId)
 
         if (!data.friends?.includes(currentUser.uid)) {
-          setError("You must be friends with this user to view their calendar");
-          return;
+          setError("You must be friends with this user to view their calendar")
+          return
         }
 
-        console.log("Friend data received:", data);
-        const events = data.events || [];
-        console.log("Friend events:", events);
+        console.log("Friend data received:", data)
+        const events = data.events || []
+        console.log("Friend events:", events)
 
         const eventsWithIds = events.map((event) => ({
           ...event,
@@ -42,28 +42,28 @@ function FriendProfilePage() {
               /\s/g,
               ""
             ),
-        }));
+        }))
 
         const sortedEvents = eventsWithIds.sort((a, b) => {
-          const dateA = new Date(a.year, a.month, a.day);
-          const dateB = new Date(b.year, b.month, b.day);
-          return dateA - dateB;
-        });
+          const dateA = new Date(a.year, a.month, a.day)
+          const dateB = new Date(b.year, b.month, b.day)
+          return dateA - dateB
+        })
 
-        setFriendData(data);
-        setFriendEvents(sortedEvents);
-        setError(null);
+        setFriendData(data)
+        setFriendEvents(sortedEvents)
+        setError(null)
       } catch (error) {
-        console.error("Error loading friend's data:", error);
-        setError("Unable to load calendar data. Please try again later.");
+        console.error("Error loading friend's data:", error)
+        setError("Unable to load calendar data. Please try again later.")
       }
-    };
+    }
 
-    loadFriendData();
-  }, [friendId, currentUser]);
+    loadFriendData()
+  }, [friendId, currentUser])
 
   if (error === "redirect") {
-    return <Navigate to="/profile" replace />;
+    return <Navigate to="/profile" replace />
   }
 
   if (error && error !== "redirect") {
@@ -72,11 +72,11 @@ function FriendProfilePage() {
         <h2>Error</h2>
         <p>{error}</p>
       </div>
-    );
+    )
   }
 
   if (!friendData) {
-    return <div>Loading friend's profile...</div>;
+    return <div>Loading friend's profile...</div>
   }
 
   return (
@@ -115,18 +115,18 @@ function FriendProfilePage() {
         <p className="no-events-message">No events to display</p>
       )}
     </section>
-  );
+  )
 }
 
 function groupEventsByDate(events) {
   return events.reduce((groups, event) => {
-    const date = `${event.month + 1}/${event.day}/${event.year}`;
+    const date = `${event.month + 1}/${event.day}/${event.year}`
     if (!groups[date]) {
-      groups[date] = [];
+      groups[date] = []
     }
-    groups[date].push(event);
-    return groups;
-  }, {});
+    groups[date].push(event)
+    return groups
+  }, {})
 }
 
-export default FriendProfilePage;
+export default FriendProfilePage

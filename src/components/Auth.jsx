@@ -20,3 +20,11 @@ export function SignOut() {
     </div>
   )
 }
+
+export default function SignInPage() {
+  return (
+    <>
+      <h1>This is the Sign In page</h1>
+    </>
+  )
+}

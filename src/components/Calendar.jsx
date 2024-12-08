@@ -1,114 +1,114 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
-import { useAuthentication } from "../services/authService";
-import "./Calendar.css";
-import CalendarHeader from "./CalendarHeader";
-import CalendarPopup from "./CalendarPopup";
-import ActiveEvents from "./ActiveEvents";
+import React, { useState, useCallback, useEffect } from "react"
+import { doc, getDoc } from "firebase/firestore"
+import { db } from "../firebaseConfig"
+import { useAuthentication } from "../services/authService"
+import "./Calendar.css"
+import CalendarHeader from "./CalendarHeader"
+import CalendarPopup from "./CalendarPopup"
+import ActiveEvents from "./ActiveEvents"
 
 export default function Calendar() {
-  const initialColor = localStorage.getItem("userProfileColor") || "#ffe5ec";
+  const initialColor = localStorage.getItem("userProfileColor") || "#ffe5ec"
   document.documentElement.style.setProperty(
     "--calendar-background",
     initialColor
-  );
+  )
 
-  const [month, setMonth] = useState(new Date().getMonth());
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventText, setEventText] = useState("");
-  const [eventStartTime, setEventStartTime] = useState("");
-  const [eventEndTime, setEventEndTime] = useState("");
-  const [events, setEvents] = useState([]);
-  const [profileColor, setProfileColor] = useState(initialColor);
-  const user = useAuthentication();
+  const [month, setMonth] = useState(new Date().getMonth())
+  const [year, setYear] = useState(new Date().getFullYear())
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [selectedDay, setSelectedDay] = useState(null)
+  const [eventTitle, setEventTitle] = useState("")
+  const [eventText, setEventText] = useState("")
+  const [eventStartTime, setEventStartTime] = useState("")
+  const [eventEndTime, setEventEndTime] = useState("")
+  const [events, setEvents] = useState([])
+  const [profileColor, setProfileColor] = useState(initialColor)
+  const user = useAuthentication()
 
   useEffect(() => {
     const fetchUserColor = async () => {
       if (user) {
         try {
-          const userRef = doc(db, "users", user.uid);
-          const userSnap = await getDoc(userRef);
+          const userRef = doc(db, "users", user.uid)
+          const userSnap = await getDoc(userRef)
           if (userSnap.exists()) {
-            const userData = userSnap.data();
-            const newColor = userData.profileColor || "#ffe5ec";
-            setProfileColor(newColor);
-            localStorage.setItem("userProfileColor", newColor);
+            const userData = userSnap.data()
+            const newColor = userData.profileColor || "#ffe5ec"
+            setProfileColor(newColor)
+            localStorage.setItem("userProfileColor", newColor)
             document.documentElement.style.setProperty(
               "--calendar-background",
               newColor
-            );
+            )
           }
         } catch (error) {
-          console.error("Error fetching user color:", error);
+          console.error("Error fetching user color:", error)
         }
       }
-    };
+    }
 
-    fetchUserColor();
-  }, [user]);
+    fetchUserColor()
+  }, [user])
 
-  const handleEventTitleChange = (e) => setEventTitle(e.target.value);
-  const handleEventTextChange = (e) => setEventText(e.target.value);
-  const handleEventStartTimeChange = (e) => setEventStartTime(e.target.value);
-  const handleEventEndTimeChange = (e) => setEventEndTime(e.target.value);
+  const handleEventTitleChange = (e) => setEventTitle(e.target.value)
+  const handleEventTextChange = (e) => setEventText(e.target.value)
+  const handleEventStartTimeChange = (e) => setEventStartTime(e.target.value)
+  const handleEventEndTimeChange = (e) => setEventEndTime(e.target.value)
 
   const handleEventsChange = useCallback((newEvents) => {
-    console.log("Updating events:", newEvents);
-    setEvents(newEvents);
-  }, []);
+    console.log("Updating events:", newEvents)
+    setEvents(newEvents)
+  }, [])
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const firstDay = new Date(year, month, 1).getDay()
 
   const closePopup = () => {
-    setIsPopupOpen(false);
-    setEventTitle("");
-    setEventText("");
-    setEventStartTime("");
-    setEventEndTime("");
-  };
+    setIsPopupOpen(false)
+    setEventTitle("")
+    setEventText("")
+    setEventStartTime("")
+    setEventEndTime("")
+  }
 
   const handleMonthChange = (increment) => {
-    const newDate = new Date(year, month + increment);
-    setMonth(newDate.getMonth());
-    setYear(newDate.getFullYear());
-  };
+    const newDate = new Date(year, month + increment)
+    setMonth(newDate.getMonth())
+    setYear(newDate.getFullYear())
+  }
 
   const addEventToState = useCallback((newEvent) => {
     setEvents((prevEvents) => {
-      const updatedEvents = [...prevEvents, newEvent];
+      const updatedEvents = [...prevEvents, newEvent]
       updatedEvents.sort((a, b) => {
-        const dateA = new Date(a.year, a.month, a.day);
-        const dateB = new Date(b.year, b.month, b.day);
-        return dateA - dateB;
-      });
-      return updatedEvents;
-    });
-  }, []);
+        const dateA = new Date(a.year, a.month, a.day)
+        const dateB = new Date(b.year, b.month, b.day)
+        return dateA - dateB
+      })
+      return updatedEvents
+    })
+  }, [])
 
   const openPopup = (day) => {
-    setSelectedDay(day);
-    setIsPopupOpen(true);
-  };
+    setSelectedDay(day)
+    setIsPopupOpen(true)
+  }
 
   const hasEvents = (day) => {
     return events.some(
       (event) =>
         event.day === day && event.month === month && event.year === year
-    );
-  };
+    )
+  }
 
   const handleEventSaved = useCallback(
     (newEvent) => {
-      addEventToState(newEvent);
-      handleEventsChange([...events, newEvent]);
+      addEventToState(newEvent)
+      handleEventsChange([...events, newEvent])
     },
     [addEventToState, handleEventsChange, events]
-  );
+  )
 
   return (
     <section className="calendar-section" aria-label="Calendar">
@@ -135,8 +135,8 @@ export default function Calendar() {
             ></div>
           ))}
           {[...Array(daysInMonth)].map((_, i) => {
-            const dayNumber = i + 1;
-            const hasEventOnDay = hasEvents(dayNumber);
+            const dayNumber = i + 1
+            const hasEventOnDay = hasEvents(dayNumber)
             return (
               <div
                 key={i}
@@ -148,7 +148,7 @@ export default function Calendar() {
                 {dayNumber}
                 {hasEventOnDay && <span className="event-indicator"></span>}
               </div>
-            );
+            )
           })}
         </div>
       </section>
@@ -171,5 +171,5 @@ export default function Calendar() {
       />
       <ActiveEvents onEventChange={handleEventsChange} events={events} />
     </section>
-  );
+  )
 }

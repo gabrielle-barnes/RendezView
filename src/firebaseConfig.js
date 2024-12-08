@@ -8,8 +8,8 @@ const firebaseConfig = {
   projectId: "rendezview-40b14",
   storageBucket: "rendezview-40b14.firebasestorage.app",
   messagingSenderId: "253267365301",
-  appId: "1:253267365301:web:4e7c721a6b9023387b9dfc"
-};
+  appId: "1:253267365301:web:4e7c721a6b9023387b9dfc",
+}
 
 export const app = initializeApp(firebaseConfig)
 
