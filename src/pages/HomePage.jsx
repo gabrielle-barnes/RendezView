@@ -1,4 +1,4 @@
-import Calendar from "../components/Calendar";
+import Calendar from "../components/Calendar"
 
 export default function HomePage() {
   return (
@@ -6,5 +6,5 @@ export default function HomePage() {
       <h1>This is the home page</h1>
       <Calendar />
     </>
-  );
+  )
 }

@@ -1,98 +1,98 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 import {
   fetchUserData,
   acceptFriendRequest,
   denyFriendRequest,
   removeFriend,
-} from "../services/friendService";
-import { useAuthentication } from "../services/authService";
-import "./ProfileFriends.css";
+} from "../services/friendService"
+import { useAuthentication } from "../services/authService"
+import "./ProfileFriends.css"
 
 export default function ProfileFriends() {
-  const user = useAuthentication();
-  const [friends, setFriends] = useState([]);
-  const [friendRequests, setFriendRequests] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const user = useAuthentication()
+  const [friends, setFriends] = useState([])
+  const [friendRequests, setFriendRequests] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     const fetchFriendsAndRequests = async () => {
       if (user) {
         try {
-          const userData = await fetchUserData(user.uid);
+          const userData = await fetchUserData(user.uid)
 
           const friendDetails = await Promise.all(
             (userData.friends || []).map(async (friendId) => {
-              const friendData = await fetchUserData(friendId);
-              return { id: friendId, ...friendData };
+              const friendData = await fetchUserData(friendId)
+              return { id: friendId, ...friendData }
             })
-          );
+          )
 
           const requestDetails = await Promise.all(
             (userData.friendRequests || []).map(async (requestId) => {
-              const requestData = await fetchUserData(requestId);
-              return { id: requestId, ...requestData };
+              const requestData = await fetchUserData(requestId)
+              return { id: requestId, ...requestData }
             })
-          );
+          )
 
-          setFriends(friendDetails);
-          setFriendRequests(requestDetails);
+          setFriends(friendDetails)
+          setFriendRequests(requestDetails)
         } catch (error) {
-          console.error("Error fetching user data:", error.message);
+          console.error("Error fetching user data:", error.message)
         }
       }
-    };
+    }
 
-    fetchFriendsAndRequests();
-  }, [user]);
+    fetchFriendsAndRequests()
+  }, [user])
 
   const handleAccept = async (requesterId) => {
     if (user) {
       try {
-        await acceptFriendRequest(user.uid, requesterId);
+        await acceptFriendRequest(user.uid, requesterId)
         setFriendRequests((prev) =>
           prev.filter((request) => request.id !== requesterId)
-        );
+        )
         const acceptedFriend = friendRequests.find(
           (request) => request.id === requesterId
-        );
-        setFriends((prev) => [...prev, acceptedFriend]);
+        )
+        setFriends((prev) => [...prev, acceptedFriend])
       } catch (error) {
-        console.error("Error accepting friend request:", error.message);
+        console.error("Error accepting friend request:", error.message)
       }
     }
-  };
+  }
 
   const handleDeny = async (requesterId) => {
     if (user) {
       try {
-        await denyFriendRequest(user.uid, requesterId);
+        await denyFriendRequest(user.uid, requesterId)
         setFriendRequests((prev) =>
           prev.filter((request) => request.id !== requesterId)
-        );
+        )
       } catch (error) {
-        console.error("Error denying friend request:", error.message);
+        console.error("Error denying friend request:", error.message)
       }
     }
-  };
+  }
 
   const handleRemoveFriend = async (friendId) => {
     if (user) {
       try {
-        await removeFriend(user.uid, friendId);
-        setFriends((prev) => prev.filter((friend) => friend.id !== friendId));
+        await removeFriend(user.uid, friendId)
+        setFriends((prev) => prev.filter((friend) => friend.id !== friendId))
       } catch (error) {
-        console.error("Error removing friend:", error.message);
+        console.error("Error removing friend:", error.message)
       }
     }
-  };
+  }
 
   const filteredFriends = friends.filter((friend) =>
     friend.displayName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  )
 
   const filteredRequests = friendRequests.filter((request) =>
     request.displayName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  )
 
   return (
     <section className="profile-friends">
@@ -148,5 +148,5 @@ export default function ProfileFriends() {
         ))}
       </ul>
     </section>
-  );
+  )
 }

@@ -1,66 +1,66 @@
-import React, { useState } from "react";
-import "./Calendar.css";
-import CalendarHeader from "./CalendarHeader";
-import CalendarPopup from "./CalendarPopup";
-import ActiveEvents from "./ActiveEvents";
+import React, { useState } from "react"
+import "./Calendar.css"
+import CalendarHeader from "./CalendarHeader"
+import CalendarPopup from "./CalendarPopup"
+import ActiveEvents from "./ActiveEvents"
 
 export default function Calendar() {
-  const [month, setMonth] = useState(new Date().getMonth());
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventText, setEventText] = useState("");
-  const [eventStartTime, setEventStartTime] = useState("");
-  const [eventEndTime, setEventEndTime] = useState("");
-  const [events, setEvents] = useState([]);
+  const [month, setMonth] = useState(new Date().getMonth())
+  const [year, setYear] = useState(new Date().getFullYear())
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [selectedDay, setSelectedDay] = useState(null)
+  const [eventTitle, setEventTitle] = useState("")
+  const [eventText, setEventText] = useState("")
+  const [eventStartTime, setEventStartTime] = useState("")
+  const [eventEndTime, setEventEndTime] = useState("")
+  const [events, setEvents] = useState([])
 
-  const handleEventTitleChange = (e) => setEventTitle(e.target.value);
-  const handleEventTextChange = (e) => setEventText(e.target.value);
-  const handleEventStartTimeChange = (e) => setEventStartTime(e.target.value);
-  const handleEventEndTimeChange = (e) => setEventEndTime(e.target.value);
+  const handleEventTitleChange = (e) => setEventTitle(e.target.value)
+  const handleEventTextChange = (e) => setEventText(e.target.value)
+  const handleEventStartTimeChange = (e) => setEventStartTime(e.target.value)
+  const handleEventEndTimeChange = (e) => setEventEndTime(e.target.value)
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const firstDay = new Date(year, month, 1).getDay()
 
   const closePopup = () => {
-    setIsPopupOpen(false);
-    setEventTitle("");
-    setEventText("");
-    setEventStartTime("");
-    setEventEndTime("");
-  };
+    setIsPopupOpen(false)
+    setEventTitle("")
+    setEventText("")
+    setEventStartTime("")
+    setEventEndTime("")
+  }
 
   const handleMonthChange = (increment) => {
     setMonth((prev) => {
-      let newMonth = prev + increment;
+      let newMonth = prev + increment
       if (newMonth > 11) {
-        newMonth = 0;
-        setYear((prevYear) => prevYear + 1);
+        newMonth = 0
+        setYear((prevYear) => prevYear + 1)
       } else if (newMonth < 0) {
-        newMonth = 11;
-        setYear((prevYear) => prevYear - 1);
+        newMonth = 11
+        setYear((prevYear) => prevYear - 1)
       }
-      return newMonth;
-    });
-  };
+      return newMonth
+    })
+  }
 
   const addEventToState = (newEvent) => {
     setEvents((prevEvents) => {
-      const updatedEvents = [...prevEvents, newEvent];
+      const updatedEvents = [...prevEvents, newEvent]
       updatedEvents.sort((a, b) => {
-        const dateA = new Date(a.year, a.month, a.day);
-        const dateB = new Date(b.year, b.month, b.day);
-        return dateA - dateB;
-      });
-      return updatedEvents;
-    });
-  };
+        const dateA = new Date(a.year, a.month, a.day)
+        const dateB = new Date(b.year, b.month, b.day)
+        return dateA - dateB
+      })
+      return updatedEvents
+    })
+  }
 
   const openPopup = (day) => {
-    setSelectedDay(day);
-    setIsPopupOpen(true);
-  };
+    setSelectedDay(day)
+    setIsPopupOpen(true)
+  }
 
   return (
     <section className="calendar-section" aria-label="Calendar">
@@ -113,5 +113,5 @@ export default function Calendar() {
       />
       <ActiveEvents onEventChange={(events) => setEvents(events)} />
     </section>
-  );
+  )
 }
