@@ -1,5 +1,7 @@
 body {
   background-color: #f7f7f7;
+  margin: 0;
+  font-family: "Arial", sans-serif;
 }
 
 h2 {
@@ -41,4 +43,62 @@ h2 {
     #d0d0e8,
     #f2e6a2
   );
+}
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  max-height: 80vh;
+  width: 100%;
+  max-width: 800px;
+  padding: 1rem 2rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.welcome-message {
+  font-size: 2rem;
+  margin-top: 2rem;
+  color: #5f4b8b;
+}
+
+.highlight {
+  background: linear-gradient(
+    135deg,
+    #ffe5ec,
+    #acc8e5,
+    #bfd6b8,
+    #e6e6fa,
+    #fffacd
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  -webkit-text-stroke: 2px #5f4b8b;
+}
+
+.logo-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.floating-logo {
+  width: 100%;
+  height: 100%;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
