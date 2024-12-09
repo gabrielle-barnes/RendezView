@@ -2,9 +2,18 @@
   --calendar-background: #ffe5ec;
 }
 
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .calendar {
   width: 600px;
-  margin: 0 auto;
   padding: 20px;
   background-color: var(--calendar-background);
   border-radius: 12px;
@@ -86,27 +95,41 @@
   visibility: hidden;
 }
 
+.day.has-events {
+  font-weight: bold;
+  color: #6b4f4f;
+  border: 2px solid #a97155;
+  box-shadow: 0 2px 4px rgba(169, 113, 85, 0.2);
+}
+
 .event-indicator {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 8px;
-  height: 8px;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
   background-color: #a97155;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(169, 113, 85, 0.3);
 }
 
-.has-events {
-  border-color: #a97155;
-  box-shadow: 0 2px 4px rgba(169, 113, 85, 0.1);
-}
+@media (max-width: 1024px) {
+  .calendar-container {
+    flex-direction: column;
+    align-items: center;
+  }
 
-.calendar-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  padding: 20px;
+  .calendar {
+    width: 100%;
+  }
+
+  .day {
+    height: 60px;
+    font-size: 0.8em;
+  }
+
+  .calendar-header {
+    font-size: 1.5em;
+  }
 }
