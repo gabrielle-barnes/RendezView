@@ -11,12 +11,10 @@ const eventCache = new Map()
 
 export async function getEvents(userId) {
   if (eventCache.has(userId)) {
-    console.log("Using cached events for user:", userId)
     return eventCache.get(userId)
   }
 
   try {
-    console.log("Fetching events for user:", userId)
     const userRef = doc(db, "users", userId)
     const userDoc = await getDoc(userRef)
 
@@ -57,7 +55,6 @@ export async function addEvent(userId, event) {
 
 export async function removeEvent(userId, event) {
   try {
-    console.log("Removing event:", event)
     const userRef = doc(db, "users", userId)
     await updateDoc(userRef, {
       events: arrayRemove(event),

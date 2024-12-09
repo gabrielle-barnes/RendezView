@@ -43,7 +43,6 @@ export default function Calendar({
               if (a.month !== b.month) return a.month - b.month
               return a.day - b.day
             })
-            console.log("Initializing calendar events:", sortedEvents)
             setEvents(sortedEvents)
           }
         } catch (error) {
@@ -108,7 +107,6 @@ export default function Calendar({
       if (a.month !== b.month) return a.month - b.month
       return a.day - b.day
     })
-    console.log("Updating events:", sortedNewEvents)
     setEvents(sortedNewEvents)
   }, [])
 

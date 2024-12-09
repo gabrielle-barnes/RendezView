@@ -28,8 +28,6 @@ export const sendFriendRequest = async (targetUserId, currentUserId) => {
     await updateDoc(userRef, {
       friendRequests: arrayUnion(currentUserId),
     })
-
-    console.log("Friend request sent successfully!")
   } catch (error) {
     console.error("Error sending friend request:", error.message)
     throw error

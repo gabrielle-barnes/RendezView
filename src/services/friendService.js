@@ -25,14 +25,11 @@ export const fetchUserData = async (userId) => {
 
 export const fetchUserEvents = async (userId, friendIds = []) => {
   try {
-    console.log(`Fetching events for userId: ${userId}`)
-
     const userRef = doc(db, "users", userId)
     const userSnap = await getDoc(userRef)
 
     if (userSnap.exists()) {
       const userData = userSnap.data()
-      console.log("Fetched data from Firebase:", userData)
 
       const eventsRef = collection(userRef, "calendar")
       const eventsSnapshot = await getDocs(eventsRef)
@@ -40,7 +37,6 @@ export const fetchUserEvents = async (userId, friendIds = []) => {
       const events = []
       eventsSnapshot.forEach((doc) => {
         const eventData = doc.data()
-        console.log("Event data:", eventData)
 
         if (
           userId === eventData.userId ||
@@ -50,7 +46,6 @@ export const fetchUserEvents = async (userId, friendIds = []) => {
         }
       })
 
-      console.log("Fetched events:", events)
       return events
     } else {
       console.warn(`User with ID ${userId} not found`)
@@ -72,8 +67,6 @@ export const sendFriendRequest = async (currentUserId, targetUserId) => {
     await updateDoc(userRef, {
       friendRequests: arrayUnion(currentUserId),
     })
-
-    console.log("Friend request sent successfully!")
   } catch (error) {
     console.error("Error sending friend request:", error.message)
     throw error

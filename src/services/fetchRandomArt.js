@@ -3,7 +3,6 @@ const MET_API_URL =
 
 async function fetchRandomArt() {
   const artNumber = Math.floor(Math.random() * 49068) + 1
-  console.log("artNumber", artNumber)
 
   const response = await fetch(`${MET_API_URL}${artNumber}`)
   if (!response.ok) {

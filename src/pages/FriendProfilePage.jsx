@@ -33,7 +33,6 @@ function FriendProfilePage() {
             return
           }
 
-          console.log("Friend data updated:", data)
           setFriendData(data)
           setFriendEvents(data.events || [])
           setError(null)
