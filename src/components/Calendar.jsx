@@ -2,13 +2,19 @@ import React, { useState, useCallback, useEffect } from "react"
 import { doc, getDoc } from "firebase/firestore"
 import { db } from "../firebaseConfig"
 import { useAuthentication } from "../services/authService"
+import { getEvents } from "../services/calendarService"
 import "./Calendar.css"
 import CalendarHeader from "./CalendarHeader"
 import CalendarPopup from "./CalendarPopup"
 import ActiveEvents from "./ActiveEvents"
 
-export default function Calendar() {
-  const initialColor = localStorage.getItem("userProfileColor") || "#ffe5ec"
+export default function Calendar({
+  isReadOnly,
+  events: parentEvents,
+  profileColor: friendProfileColor,
+}) {
+  const initialColor =
+    friendProfileColor || localStorage.getItem("userProfileColor") || "#ffe5ec"
   document.documentElement.style.setProperty(
     "--calendar-background",
     initialColor
@@ -27,8 +33,28 @@ export default function Calendar() {
   const user = useAuthentication()
 
   useEffect(() => {
+    const initializeEvents = async () => {
+      if (user && !isReadOnly && !parentEvents) {
+        try {
+          const userEvents = await getEvents(user.uid)
+          if (userEvents) {
+            console.log("Initializing calendar events:", userEvents)
+            setEvents(userEvents)
+          }
+        } catch (error) {
+          console.error("Error initializing events:", error)
+        }
+      } else if (parentEvents) {
+        setEvents(parentEvents)
+      }
+    }
+
+    initializeEvents()
+  }, [user, isReadOnly, parentEvents])
+
+  useEffect(() => {
     const fetchUserColor = async () => {
-      if (user) {
+      if (user && !friendProfileColor) {
         try {
           const userRef = doc(db, "users", user.uid)
           const userSnap = await getDoc(userRef)
@@ -49,7 +75,17 @@ export default function Calendar() {
     }
 
     fetchUserColor()
-  }, [user])
+  }, [user, friendProfileColor])
+
+  useEffect(() => {
+    if (friendProfileColor) {
+      document.documentElement.style.setProperty(
+        "--calendar-background",
+        friendProfileColor
+      )
+      setProfileColor(friendProfileColor)
+    }
+  }, [friendProfileColor])
 
   const handleEventTitleChange = (e) => setEventTitle(e.target.value)
   const handleEventTextChange = (e) => setEventText(e.target.value)
@@ -91,8 +127,10 @@ export default function Calendar() {
   }, [])
 
   const openPopup = (day) => {
-    setSelectedDay(day)
-    setIsPopupOpen(true)
+    if (!isReadOnly) {
+      setSelectedDay(day)
+      setIsPopupOpen(true)
+    }
   }
 
   const hasEvents = (day) => {
@@ -111,7 +149,7 @@ export default function Calendar() {
   )
 
   return (
-    <section className="calendar-section" aria-label="Calendar">
+    <div className="calendar-container">
       <section className="calendar">
         <CalendarHeader
           year={year}
@@ -152,24 +190,30 @@ export default function Calendar() {
           })}
         </div>
       </section>
-      <CalendarPopup
-        isOpen={isPopupOpen}
-        selectedDay={selectedDay}
-        month={month}
-        year={year}
-        eventTitle={eventTitle}
-        eventText={eventText}
-        eventStartTime={eventStartTime}
-        eventEndTime={eventEndTime}
-        onEventTitle={handleEventTitleChange}
-        onEventText={handleEventTextChange}
-        onEventStartTime={handleEventStartTimeChange}
-        onEventEndTime={handleEventEndTimeChange}
-        onClose={closePopup}
-        onEventSaved={handleEventSaved}
-        existingEvents={events}
+      {!isReadOnly && (
+        <CalendarPopup
+          isOpen={isPopupOpen}
+          selectedDay={selectedDay}
+          month={month}
+          year={year}
+          eventTitle={eventTitle}
+          eventText={eventText}
+          eventStartTime={eventStartTime}
+          eventEndTime={eventEndTime}
+          onEventTitle={handleEventTitleChange}
+          onEventText={handleEventTextChange}
+          onEventStartTime={handleEventStartTimeChange}
+          onEventEndTime={handleEventEndTimeChange}
+          onClose={closePopup}
+          onEventSaved={handleEventSaved}
+          existingEvents={events}
+        />
+      )}
+      <ActiveEvents
+        onEventChange={handleEventsChange}
+        events={events}
+        readOnly={isReadOnly}
       />
-      <ActiveEvents onEventChange={handleEventsChange} events={events} />
-    </section>
+    </div>
   )
 }

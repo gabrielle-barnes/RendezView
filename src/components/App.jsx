@@ -24,14 +24,13 @@ function App() {
               path="/profile"
               element={user ? <UserProfilePage /> : <Navigate to="/" />}
             />
+            <Route path="/friend/:friendId" element={<FriendProfilePage />} />
           </Route>
 
           <Route
             path="/"
             element={user ? <Navigate to="/homepage" /> : <SignInPage />}
           />
-
-          <Route path="/friend/:friendId" element={<FriendProfilePage />} />
         </Routes>
       </Router>
       <div className="auth-section">{user ? <SignOut /> : <SignIn />}</div>

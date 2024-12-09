@@ -4,7 +4,7 @@ export default function HomePage() {
   return (
     <>
       <h1>Your Calendar</h1>
-      <Calendar />
+      <Calendar isReadOnly={false} />
     </>
   )
 }

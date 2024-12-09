@@ -1,5 +1,5 @@
 .active-events-section {
-  width: 400px;
+  width: 300px;
   padding: 20px;
   background: linear-gradient(
     135deg,
@@ -15,19 +15,20 @@
 
 .active-events-title {
   color: #5f4b8b;
+  margin-bottom: 15px;
   font-size: 1.5em;
-  margin-bottom: 20px;
   text-align: center;
 }
 
 .no-events-message {
-  text-align: center;
   color: #5f4b8b;
-  padding: 20px;
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
 }
 
-.date-group {
-  margin-bottom: 20px;
+.date-group:not(:last-child) {
+  margin-bottom: 15px;
 }
 
 .date-title {
@@ -47,45 +48,55 @@
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.event-item:last-child {
+  margin-bottom: 0;
 }
 
 .event-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .event-title {
   color: #5f4b8b;
   margin: 0;
   font-size: 1.1em;
+  font-weight: bold;
 }
 
 .event-time {
-  color: #ff91a4;
-  margin: 0;
+  color: #5f4b8b;
+  margin: 5px 0;
   font-size: 0.9em;
 }
 
 .event-description {
-  color: #6b4f4f;
-  margin: 10px 0;
+  color: #5f4b8b;
+  margin: 0;
   font-size: 0.9em;
 }
 
 .remove-button {
-  background-color: #ffb6c1;
-  color: #5f4b8b;
+  background-color: #ff69b4;
+  color: white;
   border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 0.9em;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+  width: 100%;
 }
 
 .remove-button:hover {
-  background-color: #ff9aa2;
+  background-color: #ff69b7;
+}
+
+@media (max-width: 1024px) {
+  .active-events-section {
+    width: 100%;
+    margin-top: 20px;
+  }
 }

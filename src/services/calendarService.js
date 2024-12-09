@@ -1,33 +1,20 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore"
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore"
 import { db } from "../firebaseConfig"
 
-export async function saveEvent(userId, eventData) {
-  try {
-    const userRef = doc(db, "users", userId)
-    const userDoc = await getDoc(userRef)
-
-    if (userDoc.exists()) {
-      const userData = userDoc.data()
-      const currentEvents = userData.events || []
-
-      const newEvent = {
-        ...eventData,
-        id: Date.now().toString(),
-      }
-
-      await updateDoc(userRef, {
-        events: [...currentEvents, newEvent],
-      })
-
-      return { id: newEvent.id }
-    }
-  } catch (error) {
-    console.error("Error saving event:", error)
-    throw error
-  }
-}
+const eventCache = new Map()
 
 export async function getEvents(userId) {
+  if (eventCache.has(userId)) {
+    console.log("Using cached events for user:", userId)
+    return eventCache.get(userId)
+  }
+
   try {
     console.log("Fetching events for user:", userId)
     const userRef = doc(db, "users", userId)
@@ -36,10 +23,9 @@ export async function getEvents(userId) {
     if (userDoc.exists()) {
       const userData = userDoc.data()
       const events = userData.events || []
-      console.log(`Retrieved ${events.length} events for user ${userId}`)
+      eventCache.set(userId, events)
       return events
     }
-
     return []
   } catch (error) {
     console.error("Error getting events:", error)
@@ -47,96 +33,40 @@ export async function getEvents(userId) {
   }
 }
 
-export const removeEvent = async (userId, eventToRemove) => {
+export function clearEventCache(userId) {
+  if (userId) {
+    eventCache.delete(userId)
+  } else {
+    eventCache.clear()
+  }
+}
+
+export async function addEvent(userId, event) {
   try {
     const userRef = doc(db, "users", userId)
-    const userDoc = await getDoc(userRef)
+    await updateDoc(userRef, {
+      events: arrayUnion(event),
+    })
+    clearEventCache(userId)
+    return true
+  } catch (error) {
+    console.error("Error adding event:", error)
+    throw error
+  }
+}
 
-    if (userDoc.exists()) {
-      const userData = userDoc.data()
-      const updatedEvents = userData.events.filter(
-        (event) =>
-          !(
-            event.day === eventToRemove.day &&
-            event.month === eventToRemove.month &&
-            event.year === eventToRemove.year &&
-            event.startTime === eventToRemove.startTime &&
-            event.title === eventToRemove.title
-          )
-      )
-
-      await updateDoc(userRef, {
-        events: updatedEvents,
-      })
-
-      console.log("Event removed successfully")
-    }
+export async function removeEvent(userId, event) {
+  try {
+    const userRef = doc(db, "users", userId)
+    await updateDoc(userRef, {
+      events: arrayRemove(event),
+    })
+    clearEventCache(userId)
+    return true
   } catch (error) {
     console.error("Error removing event:", error)
     throw error
   }
 }
 
-export const updateEvent = async (userId, oldEvent, newEventData) => {
-  try {
-    const userRef = doc(db, "users", userId)
-    const userDoc = await getDoc(userRef)
-
-    if (userDoc.exists()) {
-      const userData = userDoc.data()
-      const currentEvents = userData.events || []
-
-      const updatedEvents = currentEvents.map((event) => {
-        if (
-          event.day === oldEvent.day &&
-          event.month === oldEvent.month &&
-          event.year === oldEvent.year &&
-          event.startTime === oldEvent.startTime &&
-          event.title === oldEvent.title
-        ) {
-          return {
-            ...event,
-            ...newEventData,
-          }
-        }
-        return event
-      })
-
-      await updateDoc(userRef, {
-        events: updatedEvents,
-      })
-
-      console.log("Event updated successfully")
-      return true
-    }
-    return false
-  } catch (error) {
-    console.error("Error updating event:", error)
-    throw error
-  }
-}
-
-export const checkEventConflict = (events, newEvent) => {
-  const newEventDate = new Date(newEvent.year, newEvent.month, newEvent.day)
-  const newEventStart = convertTimeToMinutes(newEvent.startTime)
-  const newEventEnd = convertTimeToMinutes(newEvent.endTime)
-
-  return events.some((existingEvent) => {
-    if (
-      existingEvent.year === newEvent.year &&
-      existingEvent.month === newEvent.month &&
-      existingEvent.day === newEvent.day
-    ) {
-      const existingStart = convertTimeToMinutes(existingEvent.startTime)
-      const existingEnd = convertTimeToMinutes(existingEvent.endTime)
-
-      return newEventStart < existingEnd && newEventEnd > existingStart
-    }
-    return false
-  })
-}
-
-const convertTimeToMinutes = (timeString) => {
-  const [hours, minutes] = timeString.split(":").map(Number)
-  return hours * 60 + minutes
-}
+export const saveEvent = addEvent

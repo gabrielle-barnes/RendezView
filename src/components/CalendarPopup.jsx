@@ -1,12 +1,14 @@
 import React, { useRef } from "react"
 import Draggable from "react-draggable"
-import { saveEvent } from "../services/calendarService"
+import { addEvent } from "../services/calendarService" // Changed from saveEvent to addEvent
 import { useAuthentication } from "../services/authService"
 import "./CalendarPopup.css"
 
 export default function CalendarPopup({
   isOpen,
   selectedDay,
+  month,
+  year,
   eventTitle,
   eventText,
   eventStartTime,
@@ -29,12 +31,17 @@ export default function CalendarPopup({
       startTime: eventStartTime,
       endTime: eventEndTime,
       day: selectedDay,
-      month: new Date().getMonth(),
-      year: new Date().getFullYear(),
+      month: month,
+      year: year,
     }
-    const savedEvent = await saveEvent(user.uid, eventData)
-    if (onEventSaved) onEventSaved({ ...eventData, id: savedEvent.id })
-    onClose()
+
+    try {
+      await addEvent(user.uid, eventData)
+      if (onEventSaved) onEventSaved(eventData)
+      onClose()
+    } catch (error) {
+      console.error("Error saving event:", error)
+    }
   }
 
   if (!isOpen) return null

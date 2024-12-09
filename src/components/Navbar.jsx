@@ -2,13 +2,13 @@ import { Link } from "react-router-dom"
 
 export function Navbar() {
   return (
-    <>
+    <nav className="navigation-buttons">
       <Link to="/homepage">
-        <button>Home</button>
+        <button className="nav-button">Home</button>
       </Link>
       <Link to="/profile">
-        <button>Your Profile</button>
+        <button className="nav-button">Your Profile</button>
       </Link>
-    </>
+    </nav>
   )
 }
