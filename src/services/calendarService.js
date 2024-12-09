@@ -57,6 +57,7 @@ export async function addEvent(userId, event) {
 
 export async function removeEvent(userId, event) {
   try {
+    console.log("Removing event:", event)
     const userRef = doc(db, "users", userId)
     await updateDoc(userRef, {
       events: arrayRemove(event),
