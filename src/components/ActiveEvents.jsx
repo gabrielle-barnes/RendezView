@@ -1,11 +1,27 @@
 import React from "react"
+import { useAuthentication } from "../services/authService"
 import { removeEvent } from "../services/calendarService"
 import "./ActiveEvents.css"
 
 export default function ActiveEvents({ events, onEventChange, readOnly }) {
+  const normalizeEvent = (event) => ({
+    ...event,
+    title: String(event.title || "").trim(),
+    description: String(event.description || "").trim(),
+    startTime: String(event.startTime || "").trim(),
+    endTime: String(event.endTime || "").trim(),
+    day: Number(event.day),
+    month: Number(event.month),
+    year: Number(event.year),
+  })
+
+  const user = useAuthentication()
   const handleRemoveEvent = async (eventToRemove) => {
     try {
-      await removeEvent(eventToRemove)
+      const userId = user.uid
+      const normalizedEvent = normalizeEvent(eventToRemove)
+      await removeEvent(userId, normalizedEvent)
+
       const updatedEvents = events.filter(
         (event) =>
           !(
