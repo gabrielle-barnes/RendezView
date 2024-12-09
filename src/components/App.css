@@ -4,3 +4,44 @@
   padding: 2rem;
   text-align: center;
 }
+
+body {
+  background-color: #f2eee183;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  color: #232323;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  color: black;
+  font-style: italic;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.home-button {
+  margin-right: 10px;
+}
+
+.your-profile-button {
+  margin-left: 10px;
+}
