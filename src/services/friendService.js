@@ -61,7 +61,7 @@ export const fetchUserEvents = async (userId, friendIds = []) => {
     throw error
   }
 }
-export const sendFriendRequest = async (targetUserId, currentUserId) => {
+export const sendFriendRequest = async (currentUserId, targetUserId) => {
   try {
     if (!targetUserId || !currentUserId) {
       throw new Error("Invalid user IDs")
