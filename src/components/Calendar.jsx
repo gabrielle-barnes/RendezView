@@ -38,14 +38,24 @@ export default function Calendar({
         try {
           const userEvents = await getEvents(user.uid)
           if (userEvents) {
-            console.log("Initializing calendar events:", userEvents)
-            setEvents(userEvents)
+            const sortedEvents = userEvents.sort((a, b) => {
+              if (a.year !== b.year) return a.year - b.year
+              if (a.month !== b.month) return a.month - b.month
+              return a.day - b.day
+            })
+            console.log("Initializing calendar events:", sortedEvents)
+            setEvents(sortedEvents)
           }
         } catch (error) {
           console.error("Error initializing events:", error)
         }
       } else if (parentEvents) {
-        setEvents(parentEvents)
+        const sortedParentEvents = [...parentEvents].sort((a, b) => {
+          if (a.year !== b.year) return a.year - b.year
+          if (a.month !== b.month) return a.month - b.month
+          return a.day - b.day
+        })
+        setEvents(sortedParentEvents)
       }
     }
 
@@ -93,8 +103,13 @@ export default function Calendar({
   const handleEventEndTimeChange = (e) => setEventEndTime(e.target.value)
 
   const handleEventsChange = useCallback((newEvents) => {
-    console.log("Updating events:", newEvents)
-    setEvents(newEvents)
+    const sortedNewEvents = [...newEvents].sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year
+      if (a.month !== b.month) return a.month - b.month
+      return a.day - b.day
+    })
+    console.log("Updating events:", sortedNewEvents)
+    setEvents(sortedNewEvents)
   }, [])
 
   const daysInMonth = new Date(year, month + 1, 0).getDate()
@@ -116,11 +131,10 @@ export default function Calendar({
 
   const addEventToState = useCallback((newEvent) => {
     setEvents((prevEvents) => {
-      const updatedEvents = [...prevEvents, newEvent]
-      updatedEvents.sort((a, b) => {
-        const dateA = new Date(a.year, a.month, a.day)
-        const dateB = new Date(b.year, b.month, b.day)
-        return dateA - dateB
+      const updatedEvents = [...prevEvents, newEvent].sort((a, b) => {
+        if (a.year !== b.year) return a.year - b.year
+        if (a.month !== b.month) return a.month - b.month
+        return a.day - b.day
       })
       return updatedEvents
     })
